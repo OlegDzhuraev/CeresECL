@@ -19,16 +19,59 @@ There is ready classes Entity, Component, Logic, which you should use to create 
 ### Entity
 Entity is MonoBehaviour script. It describes your object - contains all it Components and Logics. Looks like Unity component system, but all code is open-source.
 
+```csharp
+// Spawning new Entity object using PlayerEntityBuilder and using instance of playerPrefab as Entity GameObject and filling it with new logic (for example, it should be done in builder).
+var entity = Entity.Spawn<PlayerEntityBuilder>(playerPrefab);
+entity.AddLogic<MoveLogic>();
+```
+
 ### Component
 Component is simple class, which only contains some data of your Entity. For example, MoveComponent, which contains Speed and Direction of movement. 
 Should be no any logics code in this class.
+
+```csharp
+public class MoveComponent : Component
+{
+  public float Speed;
+  public Vector3 Direction;
+}
+```
 
 ### Logic
 Logic describes specific behaviour of the Entity. For example, MoveLogic will move it using MoveComponent data. 
 And InputLogic will fill MoveComponent Direction field with player input.
 
+```csharp
+public class MoveLogic : Logic, IInitLogic, IRunLogic
+{
+  MoveComponent moveComponent;
+
+  void IInitLogic.Init()
+  {
+    moveComponent = Entity.Get<MoveComponent>();
+
+    moveComponent.Speed = 2f;
+  }
+
+  void IRunLogic.Run()
+  {
+    Entity.transform.position += moveComponent.Direction * (moveComponent.Speed * Time.deltaTime);
+  }
+}
+```
+
 ### Builder
 You need to create your entities, filling it with Logics which will handle this entity behaviour. Builder is Init Logic realization, designed to setup your entity Logics.
+```csharp
+public class PlayerEntityBuilder : Builder
+{
+  protected override void Build()
+  {
+    Entity.AddLogic<InputLogic>();
+    Entity.AddLogic<MoveLogic>();
+  }
+}
+```
 
 ## Examples
 Check Example folder from repository, it contains simple Ceres ECL usage example. 
