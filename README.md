@@ -1,6 +1,10 @@
 # CeresECL
 Ceres ECL is implementation of Entity Component Logic architectural pattern in Unity. 
 
+<p align="center">
+    <img src="http://dzhuraev.com/CeresECL/CeresECLUnity1.png" width="364" height="385" alt="Ceres ECL">
+</p>
+
 ### What is Entity Component Logic?
 It is inspired by Entity Component System and Components over Inheritance approaches. 
 Difference from ECS is that there no Systems, which handles a lot of objects, but there is Logics, which handle self objects like MonoBehaviours in Unity. 
