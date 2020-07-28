@@ -44,8 +44,11 @@ public class MoveComponent : Component
 ```
 
 ### Logic
-Logic describes specific behaviour of the Entity. For example, MoveLogic will move it using MoveComponent data. 
+Logic describes specific behaviour of the Entity. Logics should know nothing about anothers, it should work only with components.
+
+For example, MoveLogic will move it using MoveComponent data. 
 And InputLogic will fill MoveComponent Direction field with player input.
+
 
 ```csharp
 using CeresECL;
