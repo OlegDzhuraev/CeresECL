@@ -29,3 +29,8 @@ And InputLogic will fill MoveComponent Direction field with player input.
 
 ### Builder
 You need to create your entities, filling it with Logics which will handle this entity behaviour. Builder is Init Logic realization, designed to setup your entity Logics.
+
+## Examples
+Check Example folder from repository, it contains simple Ceres ECL usage example. 
+
+Links to games examples on GitHub will be added when these examples will be created. :)
