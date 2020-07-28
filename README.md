@@ -21,16 +21,19 @@ Ceres ECL is simplier and looks more like usual Unity-way scripting, so you can 
 There is ready classes Entity, Component, Logic, which you should use to create your own. More info and examples will be added soon.
 
 ### Entity
-Entity is MonoBehaviour script. It describes your object - contains all it Components and Logics. Looks like Unity component system, but all code is open-source.
+**Entity** is **MonoBehaviour** script. It describes your object - contains all it **Components** and **Logics**. Looks like Unity component system, but all code is open-source.
 
 ```csharp
 // Spawning new Entity object using PlayerEntityBuilder and using instance of playerPrefab as Entity GameObject and filling it with new logic (for example, it should be done in builder).
 var entity = Entity.Spawn<PlayerEntityBuilder>(playerPrefab);
 entity.AddLogic<MoveLogic>();
+
+// Spawn empty game object as entity (no prefab needed).
+var emptyEntity = Entity.Spawn<PlayerEntityBuilder>();
 ```
 
 ### Component
-Component is simple class, which only contains some data of your Entity. For example, MoveComponent, which contains Speed and Direction of movement. 
+Component is simple class, which only contains some data of your **Entity**. For example, **MoveComponent**, which contains **Speed** and **Direction** of movement. 
 Should be no any logics code in this class.
 
 ```csharp
@@ -123,6 +126,19 @@ entity.Tags.Remove(Tag.CustomTag);
 ```
 
 Tags inspired by Pixeye Actors ECS tags. But possble that in my realisation this feature is not so cool. :D
+
+## Debug
+To check state of your Entity, select its GameObject on scene and you will see all Tags, Components and Logics, added to the entity with their parameters:
+<p align="center">
+    <img src="http://dzhuraev.com/CeresECL/CeresECLUnity1.png" width="364" height="385" alt="Ceres ECL">
+</p>
+
+## More FAQ
+### Can I edit variables or entities from Inspector
+**No**. All changes should be done from code - this is place for all your game logic. If you need add some data - load it from **Scritable Object** files. 
+
+### Is Ceres ECL production-ready
+No, until there will be at least one release on GitHub. Currently it is fully experimental non-commercial project. But you can use it on your risk, all features already should work.
 
 ## Examples
 Check Example folder from repository, it contains simple Ceres ECL usage example. 
