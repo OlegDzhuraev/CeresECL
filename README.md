@@ -77,3 +77,8 @@ public class PlayerEntityBuilder : Builder
 Check Example folder from repository, it contains simple Ceres ECL usage example. 
 
 Links to games examples on GitHub will be added when these examples will be created. :)
+
+## Thanks to
+Leopotam for LeoECS https://github.com/Leopotam/ecs
+Pixeye for Actors https://github.com/PixeyeHQ/actors.unity
+Inspired me to use ECS and think moer about different coding architecture patterns. :)
