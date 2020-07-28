@@ -30,6 +30,8 @@ Component is simple class, which only contains some data of your Entity. For exa
 Should be no any logics code in this class.
 
 ```csharp
+using CeresECL;
+
 public class MoveComponent : Component
 {
   public float Speed;
@@ -42,6 +44,8 @@ Logic describes specific behaviour of the Entity. For example, MoveLogic will mo
 And InputLogic will fill MoveComponent Direction field with player input.
 
 ```csharp
+using CeresECL;
+
 public class MoveLogic : Logic, IInitLogic, IRunLogic
 {
   MoveComponent moveComponent;
@@ -63,6 +67,8 @@ public class MoveLogic : Logic, IInitLogic, IRunLogic
 ### Builder
 You need to create your entities, filling it with Logics which will handle this entity behaviour. Builder is Init Logic realization, designed to setup your entity Logics.
 ```csharp
+using CeresECL;
+
 public class PlayerEntityBuilder : Builder
 {
   protected override void Build()
