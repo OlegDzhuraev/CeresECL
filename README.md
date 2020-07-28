@@ -71,6 +71,10 @@ public class MoveLogic : Logic, IInitLogic, IRunLogic
 }
 ```
 
+There is **IInitLogic** interface to implement initialization logic, similar to the **Start** Unity method.
+
+There also **IRunLogic** interface to implement run logic, similar to the **Update** Unity method.
+
 ### Builder
 You need to create your entities, filling it with Logics which will handle this entity behaviour. Builder is Init Logic realization, designed to setup your entity Logics.
 ```csharp
@@ -90,9 +94,9 @@ Builders is a only one place, where you allowed to create strong dependencies (B
 
 
 ### Tags
-If you need to create new component, which will be simple mark object state, use Tags instead. Entity.Tags contains all tags, added to entity. 
+If you need to create new component, which will be simple mark object state, use **Tags** instead. **Entity.Tags** contains all tags, added to the entity. 
 
-To create new Tag, edit enum Tag from TagList.cs file:
+To create new **Tag**, edit **enum Tag** from **TagList.cs** file:
 ```csharp
 public enum Tag
 {
