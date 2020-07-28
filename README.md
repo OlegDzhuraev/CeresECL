@@ -93,6 +93,9 @@ Check Example folder from repository, it contains simple Ceres ECL usage example
 
 Links to games examples on GitHub will be added when these examples will be created. :)
 
+## Contacts
+Our Discord server: https://discord.gg/SB9VHn4
+
 ## Thanks to
 Leopotam for LeoECS https://github.com/Leopotam/ecs
 
