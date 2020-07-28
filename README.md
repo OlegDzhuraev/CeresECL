@@ -88,6 +88,38 @@ public class PlayerEntityBuilder : Builder
 
 Builders is a only one place, where you allowed to create strong dependencies (Builders will know about all connected Logics). This is key differnce from ECS -- in ECS most of dependencies is placed in Launcher, which generate ECS World with all it's system. So there 1 ECS Launcher file vs N ECL Builder files. But in other there should be minimum dependencies amount.
 
+
+### Tags
+If you need to create new component, which will be simple mark object state, use Tags instead. Entity.Tags contains all tags, added to entity. 
+
+To create new Tag, edit enum Tag from TagList.cs file:
+```csharp
+public enum Tag
+{
+    CustomTag = 0,
+    // add your tags here
+}
+```
+
+Adding tag to the entity:
+```csharp
+entity.Tags.Add(Tag.CustomTag);
+```
+
+Note that tags are stacked, it means that you can add several same tags to the entity. It can used for some mechanics like block of some entity action from different Logics.
+
+Check of tag on the entity:
+```csharp
+entity.Tags.Have(Tag.CustomTag);
+```
+
+Removing tag (only one, if there stacked tags) from the entity:
+```csharp
+entity.Tags.Remove(Tag.CustomTag);
+```
+
+Tags inspired by Pixeye Actors ECS tags. But possble that in my realisation this feature is not so cool. :D
+
 ## Examples
 Check Example folder from repository, it contains simple Ceres ECL usage example. 
 
