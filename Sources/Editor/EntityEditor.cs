@@ -26,14 +26,26 @@ namespace CeresECL
         {
             var entity = target as Entity;
             var componentsList = entity.GetComponentsListEditor();
+            var tagsList = entity.Tags.GetTagsCopy();
             var logicsList = entity.GetLogicsListEditor();
+            
+            DrawHeader("Tags");
+            
+            GUILayout.BeginVertical(panelStyle);
+        
+            foreach (var keyValuePair in tagsList)
+                GUILayout.Label(keyValuePair.Key + ", Count: " + keyValuePair.Value, EditorStyles.boldLabel);
+
+            if (tagsList.Count == 0)
+                GUILayout.Label("No tags on object", EditorStyles.boldLabel);
+            
+            GUILayout.EndVertical();
             
             DrawHeader("Components");
             
             for (var i = 0; i < componentsList.Count; i++)
             {
                 GUILayout.BeginVertical(panelStyle);
-                
                 var component = componentsList[i];
                 var type = component.GetType();
                 

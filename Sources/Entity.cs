@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace CeresECL
@@ -6,8 +7,15 @@ namespace CeresECL
     /// <summary> Container for all components and logics of your object. Also it is MonoBehaviour, so you can use it as the connection to the Unity API.</summary>
     public sealed class Entity : MonoBehaviour
     {
+        public Tags Tags { get; private set; }
+        
         readonly List<Component> components = new List<Component>();
         readonly List<Logic> logics = new List<Logic>();
+
+        void Awake()
+        {
+            Tags = new Tags();
+        }
 
         void Start()
         {
