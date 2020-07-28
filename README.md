@@ -86,6 +86,8 @@ public class PlayerEntityBuilder : Builder
 }
 ```
 
+Builders is a only one place, where you allowed to create strong dependencies (Builders will know about all connected Logics). This is key differnce from ECS -- in ECS most of dependencies is placed in Launcher, which generate ECS World with all it's system. So there 1 ECS Launcher file vs N ECL Builder files. But in other there should be minimum dependencies amount.
+
 ## Examples
 Check Example folder from repository, it contains simple Ceres ECL usage example. 
 
