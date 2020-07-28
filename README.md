@@ -1,5 +1,5 @@
 # CeresECL
-Ceres ECL is implementation of Entity Component Logic architectural pattern in Unity. 
+Ceres ECL is experimental implementation of Entity Component Logic architectural pattern in Unity. 
 
 <p align="center">
     <img src="http://dzhuraev.com/CeresECL/CeresECLUnity1.png" width="364" height="385" alt="Ceres ECL">
