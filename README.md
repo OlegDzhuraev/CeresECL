@@ -80,5 +80,7 @@ Links to games examples on GitHub will be added when these examples will be crea
 
 ## Thanks to
 Leopotam for LeoECS https://github.com/Leopotam/ecs
+
 Pixeye for Actors https://github.com/PixeyeHQ/actors.unity
+
 Inspired me to use ECS and think moer about different coding architecture patterns. :)
