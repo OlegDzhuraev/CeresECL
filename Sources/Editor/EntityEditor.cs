@@ -25,9 +25,9 @@ namespace CeresECL
         public override void OnInspectorGUI()
         {
             var entity = target as Entity;
-            var componentsList = entity.GetComponentsListEditor();
+            var componentsList = entity.Components.GetListEditor();
             var tagsList = entity.Tags.GetTagsCopy();
-            var logicsList = entity.GetLogicsListEditor();
+            var logicsList = entity.Logics.GetListEditor();
             
             DrawHeader("Tags");
             

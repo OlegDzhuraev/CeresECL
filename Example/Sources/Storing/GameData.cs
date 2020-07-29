@@ -6,5 +6,6 @@ namespace CeresECL.Example
     public class GameData : ScriptableObject
     {
         public GameObject PlayerPrefab;
+        public GameObject BulletPrefab;
     }
 }

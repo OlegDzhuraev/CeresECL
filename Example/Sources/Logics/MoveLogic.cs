@@ -8,7 +8,7 @@ namespace CeresECL.Example
 
         void IInitLogic.Init()
         {
-            moveComponent = Entity.Get<MoveComponent>();
+            moveComponent = Entity.Components.Get<MoveComponent>();
 
             moveComponent.Speed = 2f;
         }

@@ -3,6 +3,7 @@
     /// <summary> Base class for any logics implementations. </summary>
     public abstract class Logic
     {
+        /// <summary> Parent entity of this component. </summary>
         public Entity Entity;
     }
     

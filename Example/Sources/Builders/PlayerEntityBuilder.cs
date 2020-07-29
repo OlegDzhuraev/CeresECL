@@ -1,13 +1,11 @@
-﻿using CeresECL.Example;
-
-namespace CeresECL
+﻿namespace CeresECL.Example
 {
     public class PlayerEntityBuilder : Builder
     {
         protected override void Build()
         {
-           Entity.AddLogic<InputLogic>();
-           Entity.AddLogic<MoveLogic>();
+           Entity.Logics.Add<InputLogic>();
+           Entity.Logics.Add<MoveLogic>();
         }
     }
 }
