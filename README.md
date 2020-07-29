@@ -148,7 +148,7 @@ You can send events not only from Logics, but from any MonoBehaviours too, it ca
 Note that **Logics** adding order can be important since **Event** live only one frame.
 
 ### Dependency Injection
-Ceres ECL have DI implementation for Logics. So you can inject any data to all of yours Entity Logics:
+Ceres ECL has DI implementation for Logics. So you can inject any data to all of yours Entity Logics:
 
 ```csharp
 entity.Logics.Inject(data);
@@ -185,7 +185,7 @@ To check state of your Entity, select its GameObject on scene and you will see a
 ### Is Ceres ECL production-ready
 No, until there will be at least one release on GitHub. Currently it is fully experimental non-commercial project. But you can use it on your risk, all features already should work.
 
-### Why it named Ceres?
+### Why it is named Ceres?
 Idk. I like space. And I had no ideas how to name this project. So, Ceres.
 
 ## Examples
