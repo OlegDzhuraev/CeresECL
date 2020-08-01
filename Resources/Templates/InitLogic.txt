@@ -1,0 +1,10 @@
+﻿namespace #NAMESPACE# 
+{
+    class #SCRIPTNAME# : Logic, IInitLogic
+    {
+        void IInitLogic.Init()  
+        {
+            
+        }
+    }
+}

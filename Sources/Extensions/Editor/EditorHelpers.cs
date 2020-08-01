@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace CeresECL.Misc
@@ -12,6 +14,20 @@ namespace CeresECL.Misc
             texture.Apply();
 
             return texture;
+        }
+        
+                
+        public static void LoadAssetsToList<T>(List<T> listToAddIn, string searchFilter) where T : UnityEngine.Object
+        {
+            listToAddIn.Clear();
+            
+            var assets = AssetDatabase.FindAssets(searchFilter);
+
+            for (int i = 0; i < assets.Length; i++)
+            {
+                var asset = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(assets[i]), typeof(T)) as T;
+                listToAddIn.Add(asset);
+            }
         }
         
         static string[] TypesNamesToStrings(Type[] types)
