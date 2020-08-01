@@ -1,5 +1,5 @@
 # CeresECL
-Ceres ECL is experimental implementation of Entity Component Logic architectural pattern in Unity. 
+Ceres ECL is **experimental** implementation of Entity Component Logic architectural pattern in Unity. 
 
 <p align="center">
     <img src="http://dzhuraev.com/CeresECL/CeresECLUnity1.png" width="364" height="385" alt="Ceres ECL">
@@ -24,9 +24,8 @@ There is ready classes Entity, Component, Logic, which you should use to create 
 **Entity** is **MonoBehaviour** script. It describes your object - contains all it **Components** and **Logics**. Looks like Unity component system, but all code is open-source.
 
 ```csharp
-// Spawning new Entity object using PlayerEntityBuilder and using instance of playerPrefab as Entity GameObject and filling it with new logic (for example, it should be done in builder).
+// Spawning new Entity object using PlayerEntityBuilder and using instance of playerPrefab as Entity GameObject.
 var entity = Entity.Spawn<PlayerEntityBuilder>(playerPrefab);
-entity.AddLogic<MoveLogic>();
 
 // Spawn empty game object as entity (no prefab needed).
 var emptyEntity = Entity.Spawn<PlayerEntityBuilder>();
@@ -62,7 +61,7 @@ public class MoveLogic : Logic, IInitLogic, IRunLogic
 
   void IInitLogic.Init()
   {
-    moveComponent = Entity.Get<MoveComponent>();
+    moveComponent = Entity.Components.Get<MoveComponent>();
 
     moveComponent.Speed = 2f;
   }
@@ -87,8 +86,8 @@ public class PlayerEntityBuilder : Builder
 {
   protected override void Build()
   {
-    Entity.AddLogic<InputLogic>();
-    Entity.AddLogic<MoveLogic>();
+    Entity.Logics.Add<InputLogic>();
+    Entity.Logics.Add<MoveLogic>();
   }
 }
 ```
@@ -127,6 +126,52 @@ entity.Tags.Remove(Tag.CustomTag);
 
 Tags inspired by Pixeye Actors ECS tags. But possble that in my realisation this feature is not so cool. :D
 
+### Events
+**Events** - same to the components, but live only 1 frame. So if something happens in your game, you can send event from one of Logics and other will catch it. Since event same to the component, it can contain any data. To create **Event**, create new class, derived from **Event**:
+
+```csharp
+using CeresECL;
+
+class ColliderHitEvent : Event
+{
+    public Collider2D HitCollider;
+}
+```
+
+To send **Event**, do it like this:
+```csharp
+var hitEvent = entity.Events.Add<ColliderHitEvent>();
+hitEvent.HitCollider = other;
+```
+
+You can send events not only from Logics, but from any MonoBehaviours too, it can be useful for combining of default Unity-way coding and ECL.
+Note that **Logics** adding order can be important since **Event** live only one frame.
+
+### Dependency Injection
+Ceres ECL has DI implementation for Logics. So you can inject any data to all of yours Entity Logics:
+
+```csharp
+entity.Logics.Inject(data);
+```
+
+Your Logic should have field with same to **data** type, for example, if **data** type is **Data**, your Logic should look like this:
+
+```csharp
+using CeresECL;
+
+public class TestLogic : Logic, IRunLogic
+{
+  Data injectedData;
+
+  void IRunLogic.Run()
+  {
+    // Do smth ?
+  }
+}
+```
+
+Dependency Injection idea came from LeoECS, you can find a link to its repo at the end of readme.
+
 ## Debug
 To check state of your Entity, select its GameObject on scene and you will see all Tags, Components and Logics, added to the entity with their parameters:
 <p align="center">
@@ -139,6 +184,9 @@ To check state of your Entity, select its GameObject on scene and you will see a
 
 ### Is Ceres ECL production-ready
 No, until there will be at least one release on GitHub. Currently it is fully experimental non-commercial project. But you can use it on your risk, all features already should work.
+
+### Why it is named Ceres?
+Idk. I like space. And I had no ideas how to name this project. So, Ceres.
 
 ## Examples
 Check Example folder from repository, it contains simple Ceres ECL usage example. 
