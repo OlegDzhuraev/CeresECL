@@ -94,7 +94,6 @@ public class PlayerEntityBuilder : Builder
 
 Builders is a only one place, where you allowed to create strong dependencies (Builders will know about all connected Logics). This is key differnce from ECS -- in ECS most of dependencies is placed in Launcher, which generate ECS World with all it's system. So there 1 ECS Launcher file vs N ECL Builder files. But in other there should be minimum dependencies amount.
 
-
 ### Tags
 If you need to create new component, which will be simple mark object state, use **Tags** instead. **Entity.Tags** contains all tags, added to the entity. 
 
@@ -146,6 +145,13 @@ hitEvent.HitCollider = other;
 
 You can send events not only from Logics, but from any MonoBehaviours too, it can be useful for combining of default Unity-way coding and ECL.
 Note that **Logics** adding order can be important since **Event** live only one frame.
+
+### Templates
+You can create each of these classes using templates. Click **RMB** in **Project Window** and open submenu **Ceres ECL**. There will be all actual templates. 
+
+It will generate script in root namespace, which you can change in **Editor Settings -> Editor -> C# Project Generation**. Otherwise it will be generated in **CeresECL** namespace.
+
+For template generator idea thanks to LeoECS, some used things came from its code.
 
 ### Dependency Injection
 Ceres ECL has DI implementation for Logics. So you can inject any data to all of yours Entity Logics:
