@@ -97,7 +97,8 @@ Builders is a only one place, where you allowed to create strong dependencies (B
 ### Tags
 If you need to create new component, which will be simple mark object state, use **Tags** instead. **Entity.Tags** contains all tags, added to the entity. 
 
-To create new **Tag**, edit **enum Tag** from **TagList.cs** file:
+**Tags** can be any **Enum**. You can use **TagsList.cs** from Example or create your own **enum Tag**.
+To create new **Tag**, edit **enum Tag**:
 ```csharp
 public enum Tag
 {
@@ -108,20 +109,26 @@ public enum Tag
 
 Adding tag to the entity:
 ```csharp
-entity.Tags.Add(Tag.CustomTag);
+Entity.Tags.Add(Tag.CustomTag);
 ```
 
 Note that tags are stacked, it means that you can add several same tags to the entity. It can used for some mechanics like block of some entity action from different Logics.
 
 Check of tag on the entity:
 ```csharp
-entity.Tags.Have(Tag.CustomTag);
+Entity.Tags.Have(Tag.CustomTag);
 ```
 
 Removing tag (only one, if there stacked tags) from the entity:
 ```csharp
-entity.Tags.Remove(Tag.CustomTag);
+Entity.Tags.Remove(Tag.CustomTag);
 ```
+
+New tags version is a simple integer in code, so if you want see your Tags names from enum in Entity debug, you need specify your enum type in **CeresSettings** in ECL Launcher script:
+```csharp
+CeresSettings.Instance.TagsEnum = typeof(Tag);
+```
+You can see it in **Example**.
 
 Tags inspired by Pixeye Actors ECS tags. But possble that in my realisation this feature is not so cool. :D
 
@@ -139,12 +146,37 @@ class ColliderHitEvent : Event
 
 To send **Event**, do it like this:
 ```csharp
-var hitEvent = entity.Events.Add<ColliderHitEvent>();
+var hitEvent = Entity.Events.Add<ColliderHitEvent>();
 hitEvent.HitCollider = other;
 ```
 
 You can send events not only from Logics, but from any MonoBehaviours too, it can be useful for combining of default Unity-way coding and ECL.
 Note that **Logics** adding order can be important since **Event** live only one frame.
+
+You can subscribe to event type in **Logic** like this:
+```csharp
+using CeresECL;
+
+public class Bullet : Logic, IInitLogic
+{
+  void IInitLogic.Init()
+  {
+    Entity.Events.Subscribe<ColliderHitEvent>(OnHit);
+  }
+
+  void OnHit(ColliderHitEvent eventData)
+  {
+    // handle event data
+  }
+}
+```
+
+Unsubscribe is the same:
+```csharp
+Entity.Events.Unsubscribe<ColliderHitEvent>(OnHit);
+```
+
+Current Events version is not finished and can be unstable, but all tests passed fine, so I added it to the repo.
 
 ### Templates
 You can create each of these classes using templates. Click **RMB** in **Project Window** and open submenu **Ceres ECL**. There will be all actual templates. 
@@ -157,7 +189,7 @@ For template generator idea thanks to LeoECS, some used things came from its cod
 Ceres ECL has DI implementation for Logics. So you can inject any data to all of yours Entity Logics:
 
 ```csharp
-entity.Logics.Inject(data);
+Entity.Logics.Inject(data);
 ```
 
 Your Logic should have field with same to **data** type, for example, if **data** type is **Data**, your Logic should look like this:
