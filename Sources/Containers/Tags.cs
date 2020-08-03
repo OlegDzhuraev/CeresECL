@@ -6,16 +6,16 @@ namespace CeresECL
     public sealed class Tags : Container
     {
         /// <summary> Subscribers of event when tag was added. Event doesnt raised when second same tag added.</summary>
-        readonly Dictionary<Tag, List<Action>> addSubscribers = new Dictionary<Tag, List<Action>>();
+        readonly Dictionary<IntTag, List<Action>> addSubscribers = new Dictionary<IntTag, List<Action>>();
 
         /// <summary> Subscribers of event when tag was removed. Event is being raised when last tag of some type was removed.</summary>
-        readonly Dictionary<Tag, List<Action>> removeSubscribers = new Dictionary<Tag, List<Action>>();
+        readonly Dictionary<IntTag, List<Action>> removeSubscribers = new Dictionary<IntTag, List<Action>>();
 
-        readonly Dictionary<Tag, int> addedTags = new Dictionary<Tag, int>();
+        readonly Dictionary<IntTag, int> addedTags = new Dictionary<IntTag, int>();
         
         public Tags(Entity entity) : base(entity) { }
         
-        public void Add(params Tag[] tags)
+        public void Add(params IntTag[] tags)
         {
             foreach (var tag in tags)
                 if (HaveAny(tag))
@@ -24,20 +24,20 @@ namespace CeresECL
                     FirstAddTag(tag);
         }
 
-        public void AddOnce(params Tag[] tags)
+        public void AddOnce(params IntTag[] tags)
         {
             foreach (var tag in tags)
                 if (!HaveAny(tag))
                     FirstAddTag(tag);
         }
 
-        void FirstAddTag(Tag tag)
+        void FirstAddTag(IntTag tag)
         {
             addedTags.Add(tag, 1);
             InvokeActions(tag, addSubscribers);
         }
 
-        public void Remove(params Tag[] tags)
+        public void Remove(params IntTag[] tags)
         {
             foreach (var tag in tags)
             {
@@ -54,16 +54,16 @@ namespace CeresECL
             }
         }
 
-        void InvokeActions(Tag tag, Dictionary<Tag, List<Action>> dict)
+        void InvokeActions(IntTag tag, Dictionary<IntTag, List<Action>> dict)
         {
             if (dict.ContainsKey(tag))
                 foreach (var action in dict[tag])
                     action?.Invoke();
         }
 
-        public bool Have(Tag tag) => addedTags.ContainsKey(tag);
+        public bool Have(IntTag tag) => addedTags.ContainsKey(tag);
 
-        public bool HaveAny(params Tag[] tags)
+        public bool HaveAny(params IntTag[] tags)
         {
             foreach (var tag in tags)
                 if (Have(tag))
@@ -72,7 +72,7 @@ namespace CeresECL
             return false;
         }
 
-        public bool HaveAll(params Tag[] tags)
+        public bool HaveAll(params IntTag[] tags)
         {
             foreach (var tag in tags)
                 if (!Have(tag))
@@ -81,13 +81,13 @@ namespace CeresECL
             return true;
         }
 
-        public void SubscribeToAdd(Tag tag, Action action) => AddToDict(addSubscribers, tag, action);
-        public void UnsubscribeFromAdd(Tag tag, Action action) => DelFromDict(addSubscribers, tag, action);
+        public void SubscribeToAdd(IntTag tag, Action action) => AddToDict(addSubscribers, tag, action);
+        public void UnsubscribeFromAdd(IntTag tag, Action action) => DelFromDict(addSubscribers, tag, action);
 
-        public void SubscribeToRemove(Tag tag, Action action) => AddToDict(removeSubscribers, tag, action);
-        public void UnsubscribeFromRemove(Tag tag, Action action) => DelFromDict(removeSubscribers, tag, action);
+        public void SubscribeToRemove(IntTag tag, Action action) => AddToDict(removeSubscribers, tag, action);
+        public void UnsubscribeFromRemove(IntTag tag, Action action) => DelFromDict(removeSubscribers, tag, action);
 
-        static void AddToDict(Dictionary<Tag, List<Action>> dict, Tag tag, Action action)
+        static void AddToDict(Dictionary<IntTag, List<Action>> dict, IntTag tag, Action action)
         {
             if (!dict.ContainsKey(tag))
                 dict[tag] = new List<Action>();
@@ -95,13 +95,13 @@ namespace CeresECL
             dict[tag].Add(action);
         }
 
-        static void DelFromDict(Dictionary<Tag, List<Action>> dict, Tag tag, Action action)
+        static void DelFromDict(Dictionary<IntTag, List<Action>> dict, IntTag tag, Action action)
         {
             if (dict.ContainsKey(tag))
                 dict[tag].Remove(action);
         }
 
         /// <summary> Only for editor debug. </summary>
-        public Dictionary<Tag, int> GetTagsCopy() => new Dictionary<Tag, int>(addedTags);
+        public Dictionary<IntTag, int> GetTagsCopy() => new Dictionary<IntTag, int>(addedTags);
     }
 }

@@ -8,6 +8,8 @@ namespace CeresECL.Example
         
         void Start()
         {
+            CeresSettings.Instance.TagsEnum = typeof(Tag);
+            
             var mainCamera = Camera.main;
             
             var playerEnt = Entity.Spawn<PlayerEntityBuilder>(gameData.PlayerPrefab);

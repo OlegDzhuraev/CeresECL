@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System;
+using System.Reflection;
 using CeresECL.Misc;
 using UnityEditor;
 using UnityEngine;
@@ -24,6 +25,14 @@ namespace CeresECL
 
         public override void OnInspectorGUI()
         {
+            if (!Application.isPlaying)
+            {
+                GUILayout.BeginVertical(panelStyle);
+                GUILayout.Label("Adding Entity component in inspector currently isn't supported. Do it from code.", EditorStyles.boldLabel);
+                GUILayout.EndVertical();
+                return;
+            }
+            
             var entity = target as Entity;
             var componentsList = entity.Components.GetListEditor();
             var tagsList = entity.Tags.GetTagsCopy();
@@ -32,9 +41,16 @@ namespace CeresECL
             DrawHeader("Tags");
             
             GUILayout.BeginVertical(panelStyle);
-        
+
             foreach (var keyValuePair in tagsList)
-                GUILayout.Label(keyValuePair.Key + ", Count: " + keyValuePair.Value, EditorStyles.boldLabel);
+            {
+                var tagName = keyValuePair.Key.ToString();
+                
+                if (CeresSettings.Instance.TagsEnum != null)
+                    tagName = Enum.Parse(CeresSettings.Instance.TagsEnum, tagName).ToString();
+                
+                GUILayout.Label(tagName + ", Count: " + keyValuePair.Value, EditorStyles.boldLabel);
+            }
 
             if (tagsList.Count == 0)
                 GUILayout.Label("No tags on object", EditorStyles.boldLabel);
