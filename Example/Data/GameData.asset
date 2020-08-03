@@ -16,3 +16,5 @@ MonoBehaviour:
     type: 3}
   BulletPrefab: {fileID: 9159526560964145970, guid: 359d3f7baf8fa0741b007972bded5780,
     type: 3}
+  EnemyPrefab: {fileID: 3372446858887832482, guid: 7a6dc0deb30f6c24bab60d9437f02a61,
+    type: 3}

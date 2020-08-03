@@ -7,5 +7,6 @@ namespace CeresECL.Example
     {
         public GameObject PlayerPrefab;
         public GameObject BulletPrefab;
+        public GameObject EnemyPrefab;
     }
 }
