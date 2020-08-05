@@ -146,8 +146,12 @@ class ColliderHitEvent : Event
 
 To send **Event**, do it like this:
 ```csharp
-var hitEvent = Entity.Events.Add<ColliderHitEvent>();
-hitEvent.HitCollider = other;
+ var hitEvent = new ColliderHitEvent
+{
+    HitCollider = other
+};
+
+Entity.Events.Add(hitEvent);
 ```
 
 You can send events not only from Logics, but from any MonoBehaviours too, it can be useful for combining of default Unity-way coding and ECL.
