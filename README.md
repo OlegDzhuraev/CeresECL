@@ -183,12 +183,12 @@ Entity.Events.Unsubscribe<ColliderHitEvent>(OnHit);
 Current Events version is not finished and can be unstable, but all tests passed fine, so I added it to the repo.
 
 ### Launcher
-To make it all work, you need entry point, some MonoBehaviour script. To do this correct, create your new script, name it, for example, YourLauncher, and derive from Ceres Launcher class. Next, you need to override StartAction method and add there your init logic.
+To make it all work, you need entry point, some classic **MonoBehaviour** script. To do this correct, create your new script, name it, for example, **MyLauncher**, and derive from Ceres **Launcher** class. Next, you need to override **StartAction** method and add there your init logic.
 
 ```csharp
 using Ceres.ECL;
 
-public class YourLauncher : Launcher
+public class MyLauncher : Launcher
 {
     protected override void StartAction()
     {
@@ -197,7 +197,7 @@ public class YourLauncher : Launcher
 }
 ```
 
-Base **Launcher** class handles all entities update, so there only 1 MonoBehaviour Update for **all** Entities Logics. For some unknown reasons, in Unity it increases game FPS. So do **not** make **Update** method in your Launcher. You don't need it.
+Base **Launcher** class handles all entities update, so there only 1 MonoBehaviour Update for **all** Entities Logics. For some unknown reasons, in Unity it increases game FPS. So do **not** make **Update** method in your Launcher, it can override Ceres one. And, yes, you don't need it in any case.
 
 ### Templates
 You can create each of these classes using templates. Click **RMB** in **Project Window** and open submenu **Ceres ECL**. There will be all actual templates. 
