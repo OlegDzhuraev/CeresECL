@@ -46,10 +46,10 @@ public class MoveComponent : Component
 ```
 
 ### Logic
-Logic describes specific behaviour of the Entity. Logics should know nothing about anothers, it should work only with components.
+**Logic** describes specific behaviour of the **Entity**. Logics should know nothing about anothers, it should work only with components.
 
-For example, MoveLogic will move it using MoveComponent data. 
-And InputLogic will fill MoveComponent Direction field with player input.
+For example, **MoveLogic** will move it using **MoveComponent** data. 
+And **InputLogic** will fill **MoveComponent Direction** field with player input.
 
 
 ```csharp
@@ -78,7 +78,7 @@ There is **IInitLogic** interface to implement initialization logic, similar to 
 There also **IRunLogic** interface to implement run logic, similar to the **Update** Unity method.
 
 ### Builder
-You need to create your entities, filling it with Logics which will handle this entity behaviour. Builder is Init Logic realization, designed to setup your entity Logics.
+You need to create your entities, filling it with Logics which will handle this entity behaviour. **Builder** is Init Logic realization, designed to setup your entity Logics.
 ```csharp
 using CeresECL;
 
@@ -181,6 +181,23 @@ Entity.Events.Unsubscribe<ColliderHitEvent>(OnHit);
 ```
 
 Current Events version is not finished and can be unstable, but all tests passed fine, so I added it to the repo.
+
+### Launcher
+To make it all work, you need entry point, some MonoBehaviour script. To do this correct, create your new script, name it, for example, YourLauncher, and derive from Ceres Launcher class. Next, you need to override StartAction method and add there your init logic.
+
+```csharp
+using Ceres.ECL;
+
+public class YourLauncher : Launcher
+{
+    protected override void StartAction()
+    {
+        Entity.Spawn<YourEntBuilder>();
+    }
+}
+```
+
+Base **Launcher** class handles all entities update, so there only 1 MonoBehaviour Update for **all** Entities Logics. For some unknown reasons, in Unity it increases game FPS. So do **not** make **Update** method in your Launcher. You don't need it.
 
 ### Templates
 You can create each of these classes using templates. Click **RMB** in **Project Window** and open submenu **Ceres ECL**. There will be all actual templates. 
