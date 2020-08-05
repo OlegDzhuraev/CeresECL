@@ -12,9 +12,13 @@ namespace CeresECL.Example
         {
             if (!entity)
                 return;
-          
-            var hitEvent = entity.Events.Add<ColliderHitEvent>();
-            hitEvent.HitCollider = other;
+
+            var hitEvent = new ColliderHitEvent
+            {
+                HitCollider = other
+            };
+            
+            entity.Events.Add(hitEvent);
         }
     }
 }

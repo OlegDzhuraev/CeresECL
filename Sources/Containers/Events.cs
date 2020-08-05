@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Reflection;
-using UnityEngine;
 
 namespace CeresECL
 {
@@ -10,33 +8,17 @@ namespace CeresECL
         /// <summary> Subscribers of event when Event was added. </summary>
         readonly Dictionary<Type, Action<Event>> subscribers = new Dictionary<Type, Action<Event>>();
         readonly Dictionary<Action<Event>, int> addedDelegatesList = new Dictionary<Action<Event>, int>();
-        
-        readonly List<Event> events = new List<Event>();
-        
+
         public Events(Entity entity) : base(entity) { }
-        
-        public override void Run()
-        {
-            foreach (var receivedEvent in events)
-            {
-                var type = receivedEvent.GetType();
-            
-                if (subscribers.ContainsKey(type))
-                    subscribers[type].Invoke(receivedEvent);
-            }
 
-            events.Clear();
+        public void Add<T>(T newEvent) where T : Event
+        {
+            var type = newEvent.GetType();
+            
+            if (subscribers.ContainsKey(type))
+                subscribers[type].Invoke(newEvent);
         }
 
-        public T Add<T>() where T : Event, new()
-        {
-            var newEvent = new T();
-
-            events.Add(newEvent);
-            
-            return newEvent;
-        }
-        
         // I really do not like these methods, looks weird 
         public void Subscribe<T>(Action<T> action) where T : Event
         {
