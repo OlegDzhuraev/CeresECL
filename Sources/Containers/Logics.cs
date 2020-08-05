@@ -7,21 +7,27 @@ namespace CeresECL
 {
     public sealed class Logics : Container
     {
-        readonly List<Logic> logics = new List<Logic>();
+        readonly IRunLogic[] runLogics = new IRunLogic[CeresSettings.MaxEntityLogics];
+        int logicsAdded;
         
         public Logics(Entity entity) : base(entity) { }
         
         public override void Run()
         {
-            foreach (var logic in logics)
-                if (logic is IRunLogic runLogic)
-                    runLogic.Run();
+            for (int i = 0; i < logicsAdded; i++)
+                runLogics[i].Run();
         }
-        
+
         public void Add<T>() where T : Logic, new()
         {
-            foreach (var logic in logics)
-                if (logic is T)
+            if (logicsAdded == CeresSettings.MaxEntityLogics)
+            {
+                Debug.LogWarning("You're trying to add more logics than it is allowed. Change CeresSettings parameters to allow it.");
+                return;
+            }
+            
+            for (var i = 0; i < logicsAdded; i++)
+                if (runLogics[i] is T)
                     return;
 
             var newLogic = new T
@@ -29,19 +35,23 @@ namespace CeresECL
                 Entity = Entity
             };
 
-            if (Application.isPlaying && newLogic is IInitLogic initLogic)
-                initLogic.Init(); // todo maybe make first init in update or smth
+            if (newLogic is IInitLogic initLogic)
+                initLogic.Init();
             
-            logics.Add(newLogic);
+            if (newLogic is IRunLogic runLogic)
+            {
+                runLogics[logicsAdded] = runLogic;
+                logicsAdded++;
+            }
         }
-        
+
         /// <summary> Used only for editor scripting. </summary>
         public List<Logic> GetListEditor()
         {
             var list = new List<Logic>();
-
-            for (var i = 0; i < logics.Count; i++)
-                list.Add(logics[i]);
+            
+            for (var i = 0; i < logicsAdded; i++)
+                list.Add(runLogics[i] as Logic);
             
             return list;
         }
@@ -54,7 +64,7 @@ namespace CeresECL
             var bindingAttribute = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
             var ignoreAttribute = typeof(CeresIgnoreInjectAttribute);
             
-            foreach (var logic in logics)
+            foreach (var logic in runLogics)
             {  
                 var logicType = logic.GetType();
 

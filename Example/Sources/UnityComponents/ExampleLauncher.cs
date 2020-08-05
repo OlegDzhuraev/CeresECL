@@ -2,11 +2,11 @@
 
 namespace CeresECL.Example
 {
-    public class Launcher : MonoBehaviour
+    public class ExampleLauncher : Launcher
     {
         [SerializeField] GameData gameData;
         
-        void Start()
+        protected override void StartAction()
         {
             CeresSettings.Instance.TagsEnum = typeof(Tag);
             
