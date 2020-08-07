@@ -1,0 +1,17 @@
+{
+    "name": "InsaneOne.CeresECL.Editor",
+    "references": [
+        "GUID:20f61b99a18cf83488884339898131ac"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

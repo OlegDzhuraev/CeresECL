@@ -1,0 +1,15 @@
+{
+    "name": "InsaneOne.CeresECL.Example",
+    "references": [
+        "GUID:20f61b99a18cf83488884339898131ac"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
