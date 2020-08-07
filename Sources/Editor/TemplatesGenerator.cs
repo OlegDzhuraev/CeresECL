@@ -25,6 +25,9 @@ namespace CeresECL
         [MenuItem ("Assets/Create/Ceres ECL/Event template", false, -199)]
         static void CreateEventTemplate() => CreateAnyFromTemplate("Event");
         
+        [MenuItem ("Assets/Create/Ceres ECL/Launcher template", false, -199)]
+        static void CreateLauncherTemplate() => CreateAnyFromTemplate("GameLauncher");
+        
         static void CreateAnyFromTemplate(string templateName)
         {
             var fileName = $"{GetSelectionPath()}/Ceres{templateName}.cs";

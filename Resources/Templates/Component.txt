@@ -1,4 +1,6 @@
-﻿namespace #NAMESPACE# 
+﻿using CeresECL;
+
+namespace #NAMESPACE# 
 {
     class #SCRIPTNAME# : Component
     {
