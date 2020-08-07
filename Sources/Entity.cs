@@ -29,7 +29,7 @@ namespace CeresECL
         
         public static void UpdateAll()
         {
-            for (var i = 0; i < entitiesCount; i++)
+            for (var i = 0; i < entities.Count; i++)
                 entities[i].Run();
         }
 
