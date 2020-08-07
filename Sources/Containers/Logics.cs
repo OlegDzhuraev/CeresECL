@@ -17,8 +17,18 @@ namespace CeresECL
         public override void Run()
         {
             for (int i = 0; i < logicsCount; i++)
-                if (logics[i] is IRunLogic runLogic)
+            {
+                var logic = logics[i];
+
+                if (!logic.IsInitialized && logic is IInitLogic initLogic)
+                {
+                    initLogic.Init();
+                    logic.IsInitialized = true; // C# 8.0 feature, so this is here :/
+                }
+
+                if (logic is IRunLogic runLogic)
                     runLogic.Run();
+            }
         }
 
         public void Add<T>() where T : Logic, new()
@@ -40,9 +50,6 @@ namespace CeresECL
 
             for (var i = 0; i < injects.Count; i++)
                 Inject(newLogic, injects[i]);
-            
-            if (newLogic is IInitLogic initLogic)
-                initLogic.Init();
 
             logics[logicsCount] = newLogic;
             logicsCount++;
@@ -87,7 +94,7 @@ namespace CeresECL
             
             for (var i = 0; i < logicsCount; i++)
                 list.Add(logics[i]);
-            
+
             return list;
         }
     }

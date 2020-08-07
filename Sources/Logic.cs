@@ -5,6 +5,8 @@
     {
         /// <summary> Parent entity of this component. </summary>
         public Entity Entity;
+
+        public bool IsInitialized; // C# 8.0 feature for interfaces, so it is there :/
     }
     
     /// <summary> Interface for Initialization logic, which will be runned once when Logic work started. </summary>
