@@ -1,12 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace CeresECL
 {
     /// <summary> Container for all components and logics of your object. Also it is MonoBehaviour, so you can use it as the connection to the Unity API.</summary>
     public sealed class Entity : MonoBehaviour
     {
-        static readonly Entity[] entities = new Entity[CeresSettings.MaxEntities];
-        static int entitiesCount;
+        static readonly List<Entity> entities = new List<Entity>(CeresSettings.MaxEntities);
         
         public Tags Tags { get; private set; }
         public Components Components { get; private set; }
@@ -52,12 +52,16 @@ namespace CeresECL
             var entity = entObject.AddComponent<Entity>();
             entity.logics.Add<T>();
             
-            entities[entitiesCount] = entity;
-            entitiesCount++;
+            entities.Add(entity);
             
             return entity;
         }
 
-        public void Destroy() => Destroy(gameObject);
+        public void Destroy()
+        {
+            entities.Remove(this);
+            
+            Destroy(gameObject);
+        }
     }
 }
