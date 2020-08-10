@@ -46,7 +46,7 @@ public class MoveComponent : Component
 ```
 
 ### Logic
-**Logic** describes specific behaviour of the **Entity**. Logics should know nothing about anothers, it should work only with components.
+**Logic** describes specific behaviour of the **Entity**. Logics should know nothing about anothers, it should work only with **Components**, **Events** and **Tags**.
 
 For example, **MoveLogic** will move it using **MoveComponent** data. 
 And **InputLogic** will fill **MoveComponent Direction** field with player input.
