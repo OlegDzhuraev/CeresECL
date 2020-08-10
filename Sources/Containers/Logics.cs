@@ -38,10 +38,9 @@ namespace CeresECL
                 Debug.LogWarning("You're trying to add more logics than it is allowed. Change CeresSettings parameters to allow it.");
                 return;
             }
-            
-            for (var i = 0; i < logicsCount; i++)
-                if (logics[i] is T)
-                    return;
+
+            if (Have<T>())
+                return;
 
             var newLogic = new T
             {
@@ -53,6 +52,15 @@ namespace CeresECL
 
             logics[logicsCount] = newLogic;
             logicsCount++;
+        }
+
+        public bool Have<T>() where T : Logic
+        {
+            for (var i = 0; i < logicsCount; i++)
+                if (logics[i] is T)
+                    return true;
+            
+            return false;
         }
 
         void Inject(Logic inLogic, object data)

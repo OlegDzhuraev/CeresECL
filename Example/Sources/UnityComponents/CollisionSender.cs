@@ -6,7 +6,7 @@ namespace CeresECL.Example
     {
         Entity entity;
         
-        void Start() => entity = GetComponent<Entity>();
+        void Start() => entity = gameObject.GetEntity();
 
         void OnTriggerEnter2D(Collider2D other)
         {

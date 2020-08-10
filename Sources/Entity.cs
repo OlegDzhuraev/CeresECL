@@ -27,10 +27,29 @@ namespace CeresECL
 
         void Run() => logics.Run();
         
+        public void Destroy()
+        {
+            entities.Remove(this);
+            
+            Destroy(gameObject);
+        }
+        
         public static void UpdateAll()
         {
             for (var i = 0; i < entities.Count; i++)
                 entities[i].Run();
+        }
+
+        /// <summary> Returns all Entities, which was made by Builder of type T. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
+        public static List<Entity> FindAllByBuilder<T>() where T : Builder
+        {
+            var resultList = new List<Entity>();
+            
+            for (var i = 0; i < entities.Count; i++)
+                if (entities[i].Logics.Have<T>())
+                    resultList.Add(entities[i]);
+            
+            return resultList;
         }
 
         public static Entity Spawn<T>(GameObject withPrefab) where T : Builder, new()
@@ -55,13 +74,6 @@ namespace CeresECL
             entities.Add(entity);
             
             return entity;
-        }
-
-        public void Destroy()
-        {
-            entities.Remove(this);
-            
-            Destroy(gameObject);
         }
     }
 }
