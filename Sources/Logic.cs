@@ -4,8 +4,10 @@
     public abstract class Logic
     {
         /// <summary> Parent entity of this component. </summary>
+        [CeresIgnoreInject]
         public Entity Entity;
-
+        
+        [CeresIgnoreInject]
         public bool IsInitialized; // C# 8.0 feature for interfaces, so it is there :/
     }
     

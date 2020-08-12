@@ -68,7 +68,7 @@ namespace CeresECL
             var dataType = data.GetType();
 
             var bindingAttribute = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance;
-            var ignoreAttribute = typeof(CeresIgnoreInjectAttribute); ;
+            var ignoreAttribute = typeof(CeresIgnoreInjectAttribute);
 
             var logicType = inLogic.GetType();
 

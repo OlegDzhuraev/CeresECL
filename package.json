@@ -2,9 +2,9 @@
     "name": "com.insaneone.ceresecl",
     "author": "InsaneOne",
     "displayName": "Ceres ECL",
-    "description": "Ceres ECL is Entity Component Logic implementation for Unity (C#) by InsaneOne.",
+    "description": "Ceres ECL is Entity Component Logic implementation for Unity (C#) by InsaneOne. MIT License.",
     "unity": "2019.1",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "keywords": [
         "ceresecl",
         "ecl",
