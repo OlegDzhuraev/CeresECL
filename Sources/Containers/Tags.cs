@@ -12,8 +12,9 @@ namespace CeresECL
         readonly Dictionary<IntTag, List<Action>> removeSubscribers = new Dictionary<IntTag, List<Action>>();
 
         readonly Dictionary<IntTag, int> addedTags = new Dictionary<IntTag, int>();
-        
-        public Tags(Entity entity) : base(entity) { }
+
+        public Tags(Entity entity) : base(entity)
+        { }
         
         public void Add(params IntTag[] tags)
         {
@@ -102,6 +103,9 @@ namespace CeresECL
         }
 
         /// <summary> Only for editor debug. </summary>
-        public Dictionary<IntTag, int> GetTagsCopy() => new Dictionary<IntTag, int>(addedTags);
+        public Dictionary<IntTag, int> GetTagsCopy()
+        {
+            return new Dictionary<IntTag, int>(addedTags);
+        }
     }
 }

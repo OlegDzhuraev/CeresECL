@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -26,6 +28,27 @@ namespace CeresECL.Misc
                 var asset = AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(assets[i]), typeof(T)) as T;
                 listToAddIn.Add(asset);
             }
+        }
+
+        public static Type[] GetChildTypes<T>()
+        {
+            var types = (
+                from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
+                from assemblyType in domainAssembly.GetTypes()
+                where assemblyType.IsSubclassOf(typeof(T)) && ! assemblyType.IsAbstract
+                select assemblyType).ToArray();
+
+            return types;
+        }
+
+        public static string[] TypesNamesToStrings(Type[] types)
+        {
+            var names = new string[types.Length];
+
+            for (var i = 0; i < types.Length; i++)
+                names[i] = types[i].Name;
+            
+            return names;
         }
     }
 }

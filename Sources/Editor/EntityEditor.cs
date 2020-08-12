@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using CeresECL.Misc;
 using UnityEditor;
 using UnityEngine;
@@ -11,8 +10,11 @@ namespace CeresECL
     {
         GUIStyle panelStyle, headerPanelStyle;
 
-        int selectedLogic;
-
+        int selectedComponentType, selectedLogic;
+        
+        Type[] componentsTypes;
+        string[] componentsNames;
+        
         void OnEnable()
         {
             panelStyle = new GUIStyle();
@@ -21,26 +23,41 @@ namespace CeresECL
             
             headerPanelStyle = new GUIStyle(panelStyle);
             headerPanelStyle.normal.background = EditorHelpers.GetColoredTexture(new Color(0.8f, 0.8f, 0.9f));
+            
+            componentsTypes = EditorHelpers.GetChildTypes<Component>();
+            componentsNames =EditorHelpers.TypesNamesToStrings(componentsTypes);
         }
 
         public override void OnInspectorGUI()
         {
+            var entity = target as Entity;
+
+            DrawTags(entity);
+            DrawComponents(entity);
+            DrawLogics(entity);
+        }
+        
+        void DrawHeader(string title)
+        { 
+            GUILayout.BeginVertical(headerPanelStyle);
+            GUILayout.Label(title, EditorStyles.boldLabel);
+            GUILayout.EndVertical();
+        }
+        
+        void DrawTags(Entity entity)
+        {
+            DrawHeader("Tags");
+            
+            GUILayout.BeginVertical(panelStyle);
+
             if (!Application.isPlaying)
             {
-                GUILayout.BeginVertical(panelStyle);
-                GUILayout.Label("Adding Entity component in inspector currently isn't supported. Do it from code.", EditorStyles.boldLabel);
+                GUILayout.Label("Tags is not editable in editor now.", EditorStyles.boldLabel);
                 GUILayout.EndVertical();
                 return;
             }
             
-            var entity = target as Entity;
-            var componentsList = entity.Components.GetListEditor();
             var tagsList = entity.Tags.GetTagsCopy();
-            var logicsList = entity.Logics.GetListEditor();
-            
-            DrawHeader("Tags");
-            
-            GUILayout.BeginVertical(panelStyle);
 
             foreach (var keyValuePair in tagsList)
             {
@@ -56,21 +73,33 @@ namespace CeresECL
                 GUILayout.Label("No tags on object", EditorStyles.boldLabel);
             
             GUILayout.EndVertical();
-            
+        }
+
+        void DrawComponents(Entity entity)
+        {
+            var componentsList = entity.Components.GetListEditor();
+
             DrawHeader("Components");
-            
+
             for (var i = 0; i < componentsList.Count; i++)
             {
-                GUILayout.BeginVertical(panelStyle);
                 var component = componentsList[i];
-                var type = component.GetType();
                 
-                GUILayout.Label(type.Name, EditorStyles.boldLabel);
+                GUILayout.BeginHorizontal(panelStyle);
 
-                foreach (var field in type.GetFields(BindingFlags.Instance | BindingFlags.Public))
-                    DrawField(field, component);
-
+                GUILayout.BeginVertical();
+                var editor = CreateEditor(component);
+                editor.DrawDefaultInspector();
                 GUILayout.EndVertical();
+
+                if (GUILayout.Button("Del"))
+                {
+                    entity.Components.Delete(component);
+                    GUILayout.EndHorizontal();
+                    break;
+                }
+
+                GUILayout.EndHorizontal();
             }
 
             if (componentsList.Count == 0)
@@ -80,8 +109,33 @@ namespace CeresECL
                 GUILayout.EndVertical();
             }
             
+            GUILayout.BeginHorizontal(panelStyle);
+            
+            selectedComponentType = EditorGUILayout.Popup("Add Component", selectedComponentType, componentsNames);
+            
+            if (GUILayout.Button("Add"))
+            {
+                entity.Components.Get(componentsTypes[selectedComponentType]);
+                EditorUtility.SetDirty(target);
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
+        void DrawLogics(Entity entity)
+        {
             DrawHeader("Logics");
             
+            if (!Application.isPlaying)
+            {
+                GUILayout.BeginVertical(panelStyle);
+                GUILayout.Label("Logics is not editable in editor now.", EditorStyles.boldLabel);
+                GUILayout.EndVertical();
+                return;
+            }
+            
+            var logicsList = entity.Logics.GetListEditor();
+
             for (var i = 0; i < logicsList.Count; i++)
             {
                 GUILayout.BeginVertical(panelStyle);
@@ -116,38 +170,6 @@ namespace CeresECL
 
             GUILayout.EndHorizontal();
             */
-        }
-        
-        void DrawHeader(string title)
-        { 
-            GUILayout.BeginVertical(headerPanelStyle);
-            GUILayout.Label(title, EditorStyles.boldLabel);
-            GUILayout.EndVertical();
-        }
-
-        void DrawField(FieldInfo field, object obj)
-        {
-            var fieldValue = field.GetValue(obj);
-            var fieldType = field.FieldType;
-                    
-            if (fieldType == typeof (UnityEngine.Object) || fieldType.IsSubclassOf (typeof (UnityEngine.Object))) 
-            {
-                GUILayout.BeginHorizontal ();
-                GUILayout.Label (field.Name);
-                var guiEnabled = GUI.enabled;
-                GUI.enabled = false;
-                EditorGUILayout.ObjectField (fieldValue as UnityEngine.Object, fieldType, false);
-                GUI.enabled = guiEnabled;
-                GUILayout.EndHorizontal ();
-                return;
-            }
-                    
-            var strVal = fieldValue != null ? string.Format (System.Globalization.CultureInfo.InvariantCulture, "{0}", fieldValue) : "null";
-                    
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(field.Name);
-            GUILayout.Label(strVal);
-            GUILayout.EndHorizontal();
-        }
+        } 
     }
 }

@@ -7,23 +7,34 @@ namespace CeresECL
     public sealed class Entity : MonoBehaviour
     {
         static readonly List<Entity> entities = new List<Entity>(CeresSettings.MaxEntities);
-        
-        public Tags Tags { get; private set; }
-        public Components Components { get; private set; }
+
+        public Tags Tags => tags;
+        public Components Components => components;
         public Events Events => events;
         public Logics Logics => logics;
         
+        Tags tags;
         Logics logics;
         Events events;
         
-        void Awake()
+        [SerializeField] Components components;
+        [SerializeField] bool wasInitialized;
+
+        void Reset()
         {
-            Tags = new Tags(this);
-            Components = new Components(this);
-            
+            tags = new Tags(this); // tags, events and logics will be resetted every game start. So in this version there no way to setup it from unity editor.
             events = new Events(this);
             logics = new Logics(this);
+
+            if (!wasInitialized)
+            {
+                components = new Components(this);
+
+                wasInitialized = true;
+            }
         }
+
+        void Awake() => Reset();
 
         void Run() => logics.Run();
         
