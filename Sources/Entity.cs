@@ -34,7 +34,11 @@ namespace CeresECL
             }
         }
 
-        void Awake() => Reset();
+        void Awake()
+        {
+            entities.Add(this);
+            Reset();
+        }
 
         void Run() => logics.Run();
         
@@ -92,9 +96,7 @@ namespace CeresECL
         {
             var entity = entObject.AddComponent<Entity>();
             entity.logics.Add<T>();
-            
-            entities.Add(entity);
-            
+
             return entity;
         }
     }
