@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace CeresECL
 {
+    [Serializable]
     public sealed class Logics : Container
     {
         readonly Logic[] logics = new Logic[CeresSettings.MaxEntityLogics];
@@ -30,7 +31,28 @@ namespace CeresECL
                     runLogic.Run();
             }
         }
+        
+        public void Add(Type logicType)
+        {
+            if (logicsCount == CeresSettings.MaxEntityLogics)
+            {
+                Debug.LogWarning("You're trying to add more logics than it is allowed. Change CeresSettings parameters to allow it.");
+                return;
+            }
 
+            if (Have(logicType))
+                return;
+            
+            var newLogic = (Logic)Activator.CreateInstance(logicType);
+            newLogic.Entity = Entity;
+            
+            for (var i = 0; i < injects.Count; i++)
+                Inject(newLogic, injects[i]);
+            
+            logics[logicsCount] = newLogic;
+            logicsCount++;
+        }
+        
         public void Add<T>() where T : Logic, new()
         {
             if (logicsCount == CeresSettings.MaxEntityLogics)
@@ -62,7 +84,16 @@ namespace CeresECL
             
             return false;
         }
-
+        
+        public bool Have(Type logicType)
+        {
+            for (var i = 0; i < logicsCount; i++)
+                if (logics[i].GetType() == logicType)
+                    return true;
+            
+            return false;
+        }
+        
         void Inject(Logic inLogic, object data)
         {
             var dataType = data.GetType();
@@ -94,16 +125,13 @@ namespace CeresECL
             for (var i = 0; i < logicsCount; i++)
                 Inject(logics[i], data);
         }
-        
-        /// <summary> Used only for editor scripting. </summary>
-        public List<Logic> GetListEditor()
-        {
-            var list = new List<Logic>();
-            
-            for (var i = 0; i < logicsCount; i++)
-                list.Add(logics[i]);
 
-            return list;
+        /// <summary> Used only for editor scripting. </summary>
+        public Logic[] GetLogicsEditor(out int count)
+        {
+            count = logicsCount;
+            
+            return logics;
         }
     }
 }

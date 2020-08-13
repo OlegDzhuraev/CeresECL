@@ -13,8 +13,8 @@ namespace CeresECL
 
         int selectedComponentType, selectedLogic;
         
-        Type[] componentsTypes;
-        string[] componentsNames;
+        Type[] componentsTypes, logicsTypes;
+        string[] componentsNames, logicsNames;
 
         bool addComponentButtonEnabled = true;
 
@@ -40,6 +40,9 @@ namespace CeresECL
             
             componentsTypes = EditorHelpers.GetChildTypes<Component>();
             componentsNames = EditorHelpers.TypesNamesToStrings(componentsTypes);
+            
+            logicsTypes = EditorHelpers.GetChildTypes<Logic>();
+            logicsNames = EditorHelpers.TypesNamesToStrings(logicsTypes);
         }
 
         public override void OnInspectorGUI()
@@ -195,48 +198,103 @@ namespace CeresECL
             
             if (!Application.isPlaying)
             {
-                GUILayout.BeginVertical(panelStyle);
-                GUILayout.Label("Logics is not editable in editor now.", EditorStyles.boldLabel);
-                GUILayout.EndVertical();
+                if (entity.SerializedLogics.Count == 0)
+                {
+                    GUILayout.BeginVertical(panelStyle);
+                    GUILayout.Label("No logics on object", EditorStyles.boldLabel);
+                    GUILayout.EndVertical();
+                }
+
+                var prevGUIEnabled = GUI.enabled;
+                
+                var serializedLogics = entity.SerializedLogics;
+                
+                for (var i = 0; i < serializedLogics.Count; i++)
+                {
+                    var logic = serializedLogics[i];
+                    GUILayout.BeginHorizontal(panelStyle);
+                    
+                    GUILayout.Label(entity.SerializedLogics[i].Type.Name, EditorStyles.boldLabel);
+                    
+                    GUILayout.BeginHorizontal(GUILayout.Width(128), GUILayout.MaxWidth(128));
+    
+                    GUI.enabled = i > 0;
+
+                    if (GUILayout.Button("Move Up"))
+                    {
+                        serializedLogics[i] = serializedLogics[i - 1];
+                        serializedLogics[i - 1] = logic;
+
+                        GUILayout.EndHorizontal();
+                        GUILayout.EndHorizontal();
+                        GUI.enabled = prevGUIEnabled;
+                        break;
+                    }
+
+                    GUI.enabled = i < serializedLogics.Count - 1;
+
+                    if (GUILayout.Button("Move Down"))
+                    {
+                        serializedLogics[i] = serializedLogics[i + 1];
+                        serializedLogics[i + 1] = logic;
+
+                        GUILayout.EndHorizontal();
+                        GUILayout.EndHorizontal();
+                        GUI.enabled = prevGUIEnabled;
+                        break;
+                    }
+
+                    GUI.enabled = prevGUIEnabled;
+                    
+                    if (GUILayout.Button("Del"))
+                    {
+                        entity.SerializedLogics.RemoveAt(i);
+                        
+                        GUILayout.EndHorizontal();
+                        GUILayout.EndHorizontal();
+                        break;
+                    }
+
+                    GUILayout.EndHorizontal();
+                    GUILayout.EndHorizontal();
+                }
+                
+                DrawAddLogic(entity);
+                
                 return;
             }
-            
-            var logicsList = entity.Logics.GetListEditor();
 
-            for (var i = 0; i < logicsList.Count; i++)
+            var logicsList = entity.Logics.GetLogicsEditor(out var logicsCount);
+
+            for (var i = 0; i < logicsCount; i++)
             {
                 GUILayout.BeginVertical(panelStyle);
                 GUILayout.Label(logicsList[i].GetType().Name, EditorStyles.boldLabel);
                 GUILayout.EndVertical();
             }
             
-            if (logicsList.Count == 0)
+            if (logicsCount == 0)
             {
                 GUILayout.BeginVertical(panelStyle);
                 GUILayout.Label("No logics on object", EditorStyles.boldLabel);
                 GUILayout.EndVertical();
             }
-            
-            /* For future improvements of editor
-            var listOfLogics = (
-                from domainAssembly in AppDomain.CurrentDomain.GetAssemblies()
-                from assemblyType in domainAssembly.GetTypes()
-                where assemblyType.IsSubclassOf(typeof(Logic))
-                      && ! assemblyType.IsAbstract
-                select assemblyType).ToArray();
+        }
 
-            GUILayout.BeginHorizontal();
+        void DrawAddLogic(Entity entity)
+        {
+            GUILayout.BeginHorizontal(panelStyle);
             
-            var listOfStrings = Misc.EditorHelpers.TypesNamesToStrings(listOfLogics);
-            selectedLogic = EditorGUILayout.Popup("Add Logic", selectedLogic, listOfStrings);
+            selectedLogic = EditorGUILayout.Popup("Add Logic", selectedLogic, logicsNames);
+            
             if (GUILayout.Button("Add"))
             {
-                entity.AddLogic<MoveLogic>(); // debug
+                entity.AddSerializedLogic(logicsTypes[selectedLogic]);
+
                 EditorUtility.SetDirty(target);
             }
 
             GUILayout.EndHorizontal();
-            */
-        } 
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using CeresECL.Misc;
 using UnityEngine;
 
 namespace CeresECL
@@ -13,9 +15,11 @@ namespace CeresECL
         public Events Events => events;
         public Logics Logics => logics;
         
+        public List<SerializableType> SerializedLogics = new List<SerializableType>();
+        
         Tags tags;
-        Logics logics;
         Events events;
+        Logics logics;
         
         [SerializeField] Components components;
         [SerializeField] bool wasInitialized;
@@ -29,15 +33,19 @@ namespace CeresECL
             if (!wasInitialized)
             {
                 components = new Components(this);
-
+            
                 wasInitialized = true;
             }
         }
 
         void Awake()
         {
-            entities.Add(this);
             Reset();
+            
+            entities.Add(this);
+
+            for (var i = 0; i < SerializedLogics.Count; i++)
+                logics.Add(SerializedLogics[i]);
         }
 
         void Run() => logics.Run();
@@ -47,6 +55,18 @@ namespace CeresECL
             entities.Remove(this);
             
             Destroy(gameObject);
+        }
+                
+        public void AddSerializedLogic(Type logicType)
+        {
+            if (SerializedLogics.Count == CeresSettings.MaxEntityLogics)
+            {
+                Debug.LogWarning("You're trying to add more logics than it is allowed. Change CeresSettings parameters to allow it.");
+                return;
+            }
+
+            if (!SerializedLogics.Contains(logicType))
+                SerializedLogics.Add(logicType);
         }
         
         public static void UpdateAll()
@@ -66,6 +86,7 @@ namespace CeresECL
             
             return resultList;
         }
+        
         /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
         public static List<Entity> FindAllWith<T>() where T : Component
         {
