@@ -30,8 +30,12 @@ namespace CeresECL
         
         public Component Get(Type type)
         {
-            if (!type.IsSubclassOf(typeof(Component)) || Have(type))
+            if (!type.IsSubclassOf(typeof(Component)))
                 return null;
+            
+            for (var i = 0; i < components.Count; i++)
+                if (components[i].GetType() == type)
+                    return components[i];
             
             var newComponent = ScriptableObject.CreateInstance(type) as Component;
             newComponent.Entity = Entity;
@@ -40,7 +44,16 @@ namespace CeresECL
 
             return newComponent;
         }
+        
+        public bool Have<T>() where T : Component
+        {
+            foreach (var component in components)
+                if (component is T resultComponent)
+                    return true;
 
+            return false;
+        }
+        
         public bool Have(Type componentType)
         {
             for (var i = 0; i < components.Count; i++)

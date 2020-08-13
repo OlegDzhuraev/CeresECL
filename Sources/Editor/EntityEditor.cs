@@ -16,7 +16,7 @@ namespace CeresECL
         Type[] componentsTypes;
         string[] componentsNames;
 
-        bool addComponentButtonEnabled;
+        bool addComponentButtonEnabled = true;
 
         readonly Dictionary<Component, bool> foldedComponents = new Dictionary<Component, bool>();
         

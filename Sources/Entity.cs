@@ -62,7 +62,18 @@ namespace CeresECL
             
             return resultList;
         }
-
+        /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
+        public static List<Entity> FindAllWith<T>() where T : Component
+        {
+            var resultList = new List<Entity>();
+            
+            for (var i = 0; i < entities.Count; i++)
+                if (entities[i].Components.Have<T>())
+                    resultList.Add(entities[i]);
+            
+            return resultList;
+        }
+        
         public static Entity Spawn<T>(GameObject withPrefab) where T : Builder, new()
         {
             var entObject = Instantiate(withPrefab);
