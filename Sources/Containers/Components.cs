@@ -30,16 +30,8 @@ namespace CeresECL
         
         public Component Get(Type type)
         {
-            if (!type.IsSubclassOf(typeof(Component)))
+            if (!type.IsSubclassOf(typeof(Component)) || Have(type))
                 return null;
-            
-            for (var i = 0; i < components.Count; i++)
-            {
-                var comp = components[i];
-
-                if (comp.GetType() == type)
-                    return null;
-            }
             
             var newComponent = ScriptableObject.CreateInstance(type) as Component;
             newComponent.Entity = Entity;
@@ -47,6 +39,15 @@ namespace CeresECL
             components.Add(newComponent);
 
             return newComponent;
+        }
+
+        public bool Have(Type componentType)
+        {
+            for (var i = 0; i < components.Count; i++)
+                if (components[i].GetType() == componentType)
+                    return true;
+
+            return false;
         }
         
         public void Delete<T>() where T : Component
@@ -64,17 +65,9 @@ namespace CeresECL
                     components.RemoveAt(i);
                     break;
                 }
-        }     
-        
-        /// <summary> Used only for editor scripting. </summary>
-        public List<Component> GetListEditor()
-        {
-            var list = new List<Component>();
-            
-            for (var i = 0; i < components.Count; i++)
-                list.Add(components[i]);
-            
-            return list;
         }
+
+        /// <summary> Used only for editor scripting. </summary>
+        public List<Component> GetComponentsEditor() => components;
     }
 }

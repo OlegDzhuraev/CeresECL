@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using CeresECL.Misc;
 using UnityEditor;
 using UnityEngine;
@@ -8,24 +9,37 @@ namespace CeresECL
     [CustomEditor(typeof(Entity))]
     public class EntityEditor : Editor
     {
-        GUIStyle panelStyle, headerPanelStyle;
+        GUIStyle panelStyle, headerPanelStyle, foldoutStyle;
 
         int selectedComponentType, selectedLogic;
         
         Type[] componentsTypes;
         string[] componentsNames;
+
+        bool addComponentButtonEnabled;
+
+        readonly Dictionary<Component, bool> foldedComponents = new Dictionary<Component, bool>();
         
         void OnEnable()
         {
             panelStyle = new GUIStyle();
             panelStyle.padding = new RectOffset(5, 5, 5, 5);
-            panelStyle.normal.background = EditorHelpers.GetColoredTexture(new Color(0.9f, 0.9f, 0.9f));
+            var panelColor = EditorGUIUtility.isProSkin ? new Color(0.25f, 0.25f, 0.25f) : new Color(0.9f, 0.9f, 0.9f);
+            panelStyle.normal.background = EditorHelpers.GetColoredTexture(panelColor);
+            
+            foldoutStyle = new GUIStyle();
+            var foldoutHeaderColor = EditorGUIUtility.isProSkin ? new Color(0.325f, 0.29f, 0.25f) : new Color(0.9f, 0.8f, 0.7f);
+            foldoutStyle.normal.background = EditorHelpers.GetColoredTexture(foldoutHeaderColor);
+            foldoutStyle.fontStyle = FontStyle.Bold;
+            foldoutStyle.normal.textColor = EditorGUIUtility.isProSkin ? new Color(0.75f, 0.75f, 0.75f) : Color.black;
+            foldoutStyle.padding = new RectOffset(5, 5, 5, 5);
             
             headerPanelStyle = new GUIStyle(panelStyle);
-            headerPanelStyle.normal.background = EditorHelpers.GetColoredTexture(new Color(0.8f, 0.8f, 0.9f));
+            var headerPanelColor = EditorGUIUtility.isProSkin ? new Color(0.3f, 0.275f, 0.4f) :new Color(0.8f, 0.8f, 0.9f);
+            headerPanelStyle.normal.background = EditorHelpers.GetColoredTexture(headerPanelColor);
             
             componentsTypes = EditorHelpers.GetChildTypes<Component>();
-            componentsNames =EditorHelpers.TypesNamesToStrings(componentsTypes);
+            componentsNames = EditorHelpers.TypesNamesToStrings(componentsTypes);
         }
 
         public override void OnInspectorGUI()
@@ -33,7 +47,9 @@ namespace CeresECL
             var entity = target as Entity;
 
             DrawTags(entity);
+            EditorGUILayout.Space();
             DrawComponents(entity);
+            EditorGUILayout.Space();
             DrawLogics(entity);
         }
         
@@ -77,29 +93,68 @@ namespace CeresECL
 
         void DrawComponents(Entity entity)
         {
-            var componentsList = entity.Components.GetListEditor();
+            var componentsList = entity.Components.GetComponentsEditor();
 
             DrawHeader("Components");
 
             for (var i = 0; i < componentsList.Count; i++)
             {
                 var component = componentsList[i];
+
+                if (!foldedComponents.ContainsKey(component))
+                    foldedComponents.Add(component, true);
+
+                if (GUILayout.Button(component.GetType().Name, foldoutStyle))
+                    foldedComponents[component] = !foldedComponents[component];
                 
-                GUILayout.BeginHorizontal(panelStyle);
-
-                GUILayout.BeginVertical();
-                var editor = CreateEditor(component);
-                editor.DrawDefaultInspector();
-                GUILayout.EndVertical();
-
-                if (GUILayout.Button("Del"))
+                if (foldedComponents[component])
                 {
-                    entity.Components.Delete(component);
-                    GUILayout.EndHorizontal();
-                    break;
-                }
+                    GUILayout.BeginHorizontal(panelStyle);
 
-                GUILayout.EndHorizontal();
+                    GUILayout.BeginVertical();
+                    var editor = CreateEditor(component);
+                    editor.DrawDefaultInspector();
+                    GUILayout.EndVertical();
+
+                    GUILayout.BeginVertical(GUILayout.MaxWidth(82), GUILayout.Width(82), GUILayout.ExpandWidth(false));
+                    if (GUILayout.Button("Del"))
+                    {
+                        entity.Components.Delete(component);
+                        GUILayout.EndVertical();
+                        GUILayout.EndHorizontal();
+                        break;
+                    }
+
+                    if (i > 0)
+                    {
+                        if (GUILayout.Button("Move Up"))
+                        {
+                            componentsList[i] = componentsList[i - 1];
+                            componentsList[i - 1] = component;
+
+                            GUILayout.EndVertical();
+                            GUILayout.EndHorizontal();
+                            break;
+                        }
+                    }
+
+                    if (i < componentsList.Count - 1)
+                    {
+                        if (GUILayout.Button("Move Down"))
+                        {
+                            componentsList[i] = componentsList[i + 1];
+                            componentsList[i + 1] = component;
+
+                            GUILayout.EndVertical();
+                            GUILayout.EndHorizontal();
+                            break;
+                        }
+                    }
+
+                    GUILayout.EndVertical();
+
+                    GUILayout.EndHorizontal();
+                }
             }
 
             if (componentsList.Count == 0)
@@ -111,14 +166,26 @@ namespace CeresECL
             
             GUILayout.BeginHorizontal(panelStyle);
             
+            var prevActive = GUI.enabled;
+            
+            EditorGUI.BeginChangeCheck();
             selectedComponentType = EditorGUILayout.Popup("Add Component", selectedComponentType, componentsNames);
+
+            if (EditorGUI.EndChangeCheck())
+                addComponentButtonEnabled = !entity.Components.Have(componentsTypes[selectedComponentType]);
+
+            GUI.enabled = addComponentButtonEnabled;
             
             if (GUILayout.Button("Add"))
             {
                 entity.Components.Get(componentsTypes[selectedComponentType]);
                 EditorUtility.SetDirty(target);
+                
+                addComponentButtonEnabled = false;
             }
-
+            
+            GUI.enabled = prevActive;
+            
             GUILayout.EndHorizontal();
         }
 

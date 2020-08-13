@@ -6,6 +6,6 @@ namespace CeresECL
     public class Component : ScriptableObject
     {
         /// <summary> Parent entity of this component. </summary>
-        public Entity Entity;
+        [HideInInspector] public Entity Entity;
     }
 }
