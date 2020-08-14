@@ -26,7 +26,7 @@ namespace CeresECL.Example
                 enemyEnt.Logics.Inject(gameData);
                 enemyEnt.Logics.Inject(mainCamera);
                 
-                enemyEnt.transform.position = new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
+                enemyEnt.Transform.position = new Vector2(Random.Range(-3f, 3f), Random.Range(-3f, 3f));
             }
         }
     }

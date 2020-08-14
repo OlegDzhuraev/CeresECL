@@ -59,11 +59,12 @@ namespace CeresECL
             Destroy(gameObject);
         }
 
-        public T AddUnityComponent<T>() where T : MonoBehaviour => gameObject.AddComponent<T>();
-        public T GetUnityComponent<T>() where T : MonoBehaviour => gameObject.GetComponent<T>();
+        public T AddUnityComponent<T>() where T : Behaviour => gameObject.AddComponent<T>();
+        public T GetUnityComponent<T>() where T : Behaviour => gameObject.GetComponent<T>();
         
-        T IEntity.Spawn<T>() => Spawn<T>();
-        T IEntity.Spawn<T>(GameObject prefab) => Spawn<T>(prefab);
+        IEntity IEntity.Spawn<T>() => Spawn<T>();
+        IEntity IEntity.Spawn<T>(GameObject prefab) => Spawn<T>(prefab);
+        List<IEntity> IEntity.FindAllWith<T>() => FindAllWith<T>();
         
         /// <summary> Run game update cycle. It should be done from one place in code. </summary>
         public static void UpdateAll()
@@ -73,9 +74,9 @@ namespace CeresECL
         }
         
         /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
-        public static List<Entity> FindAllWith<T>() where T : Component
+        public static List<IEntity> FindAllWith<T>() where T : Component
         {
-            var resultList = new List<Entity>();
+            var resultList = new List<IEntity>();
             
             for (var i = 0; i < entities.Count; i++)
                 if (entities[i].Components.Have<T>())
@@ -84,21 +85,21 @@ namespace CeresECL
             return resultList;
         }
 
-        public static T Spawn<T>(GameObject withPrefab) where T : Entity, new()
+        public static IEntity Spawn<T>(GameObject withPrefab) where T : Entity, new()
         {
             var entObject = Instantiate(withPrefab);
 
             return BuildEntity<T>(entObject);
         }
         
-        public static T Spawn<T>() where T : Entity, new()
+        public static IEntity Spawn<T>() where T : Entity, new()
         {
             var entObject = new GameObject("Entity");
             
             return BuildEntity<T>(entObject);
         }
 
-        static T BuildEntity<T>(GameObject entObject) where T : Entity, new()
+        static IEntity BuildEntity<T>(GameObject entObject) where T : Entity, new()
         {
             var entity = entObject.GetComponent<T>();
             
