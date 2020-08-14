@@ -52,9 +52,9 @@ namespace CeresECL
             
             GUILayout.BeginVertical(panelStyle);
 
-            if (!Application.isPlaying)
+            if (!Application.isPlaying || entity.Tags == null)
             {
-                GUILayout.Label("Tags is not editable in editor now.", EditorStyles.boldLabel);
+                GUILayout.Label("Tags work only on scene and in runtime", EditorStyles.boldLabel);
                 GUILayout.EndVertical();
                 return;
             }

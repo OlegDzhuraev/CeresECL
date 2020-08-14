@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace CeresECL
 {
-    public sealed class Tags : Container
+    public sealed class Tags
     {
         /// <summary> Subscribers of event when tag was added. Event doesnt raised when second same tag added.</summary>
         readonly Dictionary<IntTag, List<Action>> addSubscribers = new Dictionary<IntTag, List<Action>>();
@@ -12,9 +12,7 @@ namespace CeresECL
         readonly Dictionary<IntTag, List<Action>> removeSubscribers = new Dictionary<IntTag, List<Action>>();
 
         readonly Dictionary<IntTag, int> addedTags = new Dictionary<IntTag, int>();
-        
-        public Tags(Entity entity) : base(entity) { }
-        
+ 
         public void Add(params IntTag[] tags)
         {
             foreach (var tag in tags)

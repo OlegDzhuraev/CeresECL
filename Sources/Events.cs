@@ -3,13 +3,11 @@ using System.Collections.Generic;
 
 namespace CeresECL
 {
-    public sealed class Events : Container
+    public sealed class Events
     {
         /// <summary> Subscribers of event when Event was added. </summary>
         readonly Dictionary<Type, Action<Event>> subscribers = new Dictionary<Type, Action<Event>>();
         readonly Dictionary<Action<Event>, int> addedDelegatesList = new Dictionary<Action<Event>, int>();
-
-        public Events(Entity entity) : base(entity) { }
 
         public void Add<T>(T newEvent) where T : Event
         {

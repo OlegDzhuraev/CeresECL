@@ -2,20 +2,18 @@
 
 namespace CeresECL.Example
 {
-    public class MoveLogic : Logic, IInitLogic, IRunLogic
+    public class MoveLogic : ExtendedBehaviour
     {
         MoveComponent moveComponent;
 
-        void IInitLogic.Init()
+        protected override void Init()
         {
-            moveComponent = Entity.Components.Get<MoveComponent>();
-
-            moveComponent.Speed = 2f;
+            moveComponent = Entity.Get<MoveComponent>();
         }
 
-        void IRunLogic.Run()
+        protected override void Run()
         {
-            Entity.Transform.position += moveComponent.Direction * (moveComponent.Speed * Time.deltaTime);
+            transform.position += moveComponent.Direction * (moveComponent.Speed * Time.deltaTime);
         }
     }
 }

@@ -2,11 +2,11 @@
 
 namespace #NAMESPACE# 
 {
-    class #SCRIPTNAME# : Logic, IRunLogic
-    {
-        void IRunLogic.Run()
+    class #SCRIPTNAME# : ExtendedBehaviour
+    {      
+        protected override void Run()  
         {
-
+            // run logic here. Which previously was in Update
         }
     }
 }

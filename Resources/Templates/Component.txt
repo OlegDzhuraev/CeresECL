@@ -2,7 +2,7 @@
 
 namespace #NAMESPACE# 
 {
-    class #SCRIPTNAME# : Component
+    class #SCRIPTNAME# : MonoBehaviour
     {
         // add your data here
     }

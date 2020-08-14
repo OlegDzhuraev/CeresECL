@@ -2,11 +2,11 @@
 
 namespace #NAMESPACE# 
 {
-    class #SCRIPTNAME# : Logic, IInitLogic
+    class #SCRIPTNAME# : ExtendedBehaviour
     {
-        void IInitLogic.Init()  
+        protected override void Init()  
         {
-            
+            // init logic here. Use it instead of Awake. You still can use default start, it will run after Init
         }
     }
 }

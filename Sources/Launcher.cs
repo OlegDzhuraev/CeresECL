@@ -8,6 +8,6 @@ namespace CeresECL
 
         protected abstract void StartAction();
         
-        void Update() => Entity.UpdateAll();
+        void Update() => ExtendedBehaviour.RunAll();
     }
 }

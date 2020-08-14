@@ -2,18 +2,18 @@
 
 namespace CeresECL.Example
 {
-	public class BulletLogic : Logic, IInitLogic, IRunLogic
+	public class BulletLogic : ExtendedBehaviour
 	{
 		BulletComponent bulletComponent;
-		
-		public void Init()
+
+		protected override void Init()
 		{
-			bulletComponent = Entity.Components.Get<BulletComponent>();
+			bulletComponent = Get<BulletComponent>();
 			
 			Entity.Events.Subscribe<ColliderHitEvent>(CheckHit);
 		}
 		
-		void IRunLogic.Run()
+		protected override void Run()
 		{
 			bulletComponent.Lifetime -= Time.deltaTime;
 			

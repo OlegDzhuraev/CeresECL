@@ -2,18 +2,19 @@
 
 namespace CeresECL.Example
 {
-    public class InputLogic : Logic, IInitLogic, IRunLogic
+    public class InputLogic : ExtendedBehaviour
     {
-        GameData gameData;
-        Camera mainCamera;
+        public GameData GameData;
+        public Camera MainCamera;
+        
         MoveComponent moveComponent;
 
-        void IInitLogic.Init()
+        protected override void Init()
         {
-            moveComponent = Entity.Components.Get<MoveComponent>();
+            moveComponent = Get<MoveComponent>();
         }
 
-        void IRunLogic.Run()
+        protected override void Run()
         {
             HandleMove();
             
@@ -32,25 +33,21 @@ namespace CeresECL.Example
         // todo move to separated shooting logic, keep only input events in this class
         void DoShoot()
         {
-            var selfPosition = Entity.Transform.position;
+            var selfPosition = transform.position;
             
-            var mouseWorldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            var mouseWorldPosition = MainCamera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPosition.z = selfPosition.z;
             
             var shootDirection = (mouseWorldPosition - selfPosition).normalized;
            
-            var bullet = Entity.Spawn<BulletEntity>(gameData.BulletPrefab);
-            bullet.Transform.position = selfPosition;
-            
-            var bulletMoveComponent = bullet.Components.Get<MoveComponent>();
-                
-            bulletMoveComponent.Direction = shootDirection;
-            bulletMoveComponent.Speed = 6;
+            var bullet = Entity.Spawn(GameData.BulletPrefab);
+            bullet.transform.position = selfPosition;
 
-            var bulletComponent = bullet.Components.Get<BulletComponent>();
+            var bulletMoveComponent = bullet.Get<MoveComponent>();
+            bulletMoveComponent.Direction = shootDirection;
+
+            var bulletComponent = bullet.Get<BulletComponent>();
             bulletComponent.Owner = Entity;
-            bulletComponent.Damage = 15;
-            bulletComponent.Lifetime = 5;
         }
     }
 }

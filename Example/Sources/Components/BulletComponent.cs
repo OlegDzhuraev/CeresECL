@@ -1,8 +1,11 @@
-﻿namespace CeresECL.Example
+﻿using UnityEngine;
+
+namespace CeresECL.Example
 {
-	public class BulletComponent : Component
+	public class BulletComponent : MonoBehaviour
 	{
-		public IEntity Owner;
+		[HideInInspector] public Entity Owner;
+		
 		public float Damage;
 		public float Lifetime;
 	}
