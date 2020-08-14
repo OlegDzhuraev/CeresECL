@@ -23,6 +23,26 @@ namespace CeresECL
         
         [SerializeField] Components components;
         [SerializeField] bool wasInitialized;
+        
+        [SerializeField] int instanceID;
+        
+        void OnValidate()
+        {
+            if (instanceID == GetInstanceID())
+                return;
+  
+            if (instanceID == 0)
+            {
+                instanceID = GetInstanceID();
+            }
+            else
+            {
+                instanceID = GetInstanceID();
+
+                if (instanceID < 0)
+                    components.RewriteWithCloned();
+            }
+        }
 
         void Reset()
         {
@@ -75,18 +95,6 @@ namespace CeresECL
                 entities[i].Run();
         }
 
-        /// <summary> Returns all Entities, which was made by Builder of type T. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
-        public static List<Entity> FindAllByBuilder<T>() where T : Builder
-        {
-            var resultList = new List<Entity>();
-            
-            for (var i = 0; i < entities.Count; i++)
-                if (entities[i].Logics.Have<T>())
-                    resultList.Add(entities[i]);
-            
-            return resultList;
-        }
-        
         /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
         public static List<Entity> FindAllWith<T>() where T : Component
         {
@@ -115,7 +123,11 @@ namespace CeresECL
 
         static Entity BuildEntity<T>(GameObject entObject) where T : Builder, new()
         {
-            var entity = entObject.AddComponent<Entity>();
+            var entity = entObject.GetComponent<Entity>();
+            
+            if (!entity)
+                entity = entObject.AddComponent<Entity>();
+            
             entity.logics.Add<T>();
 
             return entity;

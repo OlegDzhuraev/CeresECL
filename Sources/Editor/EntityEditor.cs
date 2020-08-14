@@ -18,7 +18,7 @@ namespace CeresECL
 
         bool addComponentButtonEnabled = true;
 
-        readonly Dictionary<Component, bool> foldedComponents = new Dictionary<Component, bool>();
+        readonly List<bool> foldedComponents = new List<bool>();
         
         void OnEnable()
         {
@@ -104,13 +104,13 @@ namespace CeresECL
             {
                 var component = componentsList[i];
 
-                if (!foldedComponents.ContainsKey(component))
-                    foldedComponents.Add(component, true);
+                if (foldedComponents.Count <= i)
+                    foldedComponents.Add(true);
 
                 if (GUILayout.Button(component.GetType().Name, foldoutStyle))
-                    foldedComponents[component] = !foldedComponents[component];
+                    foldedComponents[i] = !foldedComponents[i];
                 
-                if (foldedComponents[component])
+                if (foldedComponents[i])
                 {
                     GUILayout.BeginHorizontal(panelStyle);
 

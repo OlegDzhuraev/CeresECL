@@ -48,7 +48,7 @@ namespace CeresECL
         public bool Have<T>() where T : Component
         {
             foreach (var component in components)
-                if (component is T resultComponent)
+                if (component is T)
                     return true;
 
             return false;
@@ -82,5 +82,12 @@ namespace CeresECL
 
         /// <summary> Used only for editor scripting. </summary>
         public List<Component> GetComponentsEditor() => components;
+
+        /// <summary> Clones all components and rewrites it in list of components. Used for copy and duplicate of Entities in editor.</summary>
+        public void RewriteWithCloned()
+        {
+            for (var i = 0; i < components.Count; i++)
+                components[i] = ScriptableObject.Instantiate(components[i]);
+        }
     }
 }
