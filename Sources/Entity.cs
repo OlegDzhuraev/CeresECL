@@ -9,19 +9,32 @@ namespace CeresECL
     {
         static readonly List<Entity> entities = new List<Entity>();
 
-        public Tags Tags => tags;
-        public Events Events => events;
+        public Tags Tags
+        {
+            get
+            {
+                if (!tags)
+                    tags = new Tags();
+
+                return tags;
+            }
+        }
+        
+        public Events Events 
+        {
+            get
+            {
+                if (!events)
+                    events = new Events();
+
+                return events;
+            }
+        }
 
         Tags tags;
         Events events;
 
-        void Awake()
-        {
-            tags = new Tags();
-            events = new Events();
-
-            entities.Add(this);
-        }
+        void Awake() => entities.Add(this);
 
         public void Destroy()
         {
