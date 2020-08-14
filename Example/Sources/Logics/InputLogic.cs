@@ -32,15 +32,15 @@ namespace CeresECL.Example
         // todo move to separated shooting logic, keep only input events in this class
         void DoShoot()
         {
-            var selfPosition = Entity.transform.position;
+            var selfPosition = Entity.Transform.position;
             
             var mouseWorldPosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             mouseWorldPosition.z = selfPosition.z;
             
             var shootDirection = (mouseWorldPosition - selfPosition).normalized;
            
-            var bullet = Entity.Spawn<BulletEntityBuilder>(gameData.BulletPrefab);
-            bullet.transform.position = selfPosition;
+            var bullet = Entity.Spawn<BulletEntity>(gameData.BulletPrefab);
+            bullet.Transform.position = selfPosition;
             
             var bulletMoveComponent = bullet.Components.Get<MoveComponent>();
                 

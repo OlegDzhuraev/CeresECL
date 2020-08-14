@@ -18,10 +18,7 @@ namespace CeresECL
         
         [MenuItem ("Assets/Create/Ceres ECL/Run Logic template", false, -199)]
         static void CreateRunLogicTemplate() => CreateAnyFromTemplate("RunLogic");
-        
-        [MenuItem ("Assets/Create/Ceres ECL/Builder template", false, -199)]
-        static void CreateBuilderTemplate() => CreateAnyFromTemplate("Builder");
-        
+
         [MenuItem ("Assets/Create/Ceres ECL/Event template", false, -199)]
         static void CreateEventTemplate() => CreateAnyFromTemplate("Event");
         

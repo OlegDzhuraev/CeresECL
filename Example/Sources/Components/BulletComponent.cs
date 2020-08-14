@@ -2,7 +2,7 @@
 {
 	public class BulletComponent : Component
 	{
-		public Entity Owner;
+		public IEntity Owner;
 		public float Damage;
 		public float Lifetime;
 	}

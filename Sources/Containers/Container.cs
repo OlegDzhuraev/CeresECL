@@ -2,7 +2,7 @@
 {
     public abstract class Container
     {
-        public Entity Entity { get; }
+        protected Entity Entity { get; }
 
         protected Container(Entity entity)
         {

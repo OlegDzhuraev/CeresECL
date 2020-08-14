@@ -15,7 +15,7 @@ namespace CeresECL.Example
 
         void IRunLogic.Run()
         {
-            Entity.transform.position += moveComponent.Direction * (moveComponent.Speed * Time.deltaTime);
+            Entity.Transform.position += moveComponent.Direction * (moveComponent.Speed * Time.deltaTime);
         }
     }
 }

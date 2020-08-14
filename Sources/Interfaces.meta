@@ -1,9 +1,7 @@
 fileFormatVersion: 2
-guid: 479758e76fc117c44856dd892571be16
-labels:
-- CeresEcl
-- CeresTemplate
-TextScriptImporter:
+guid: 08d55d95e2a20904e82dd29c2b2888dd
+folderAsset: yes
+DefaultImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 

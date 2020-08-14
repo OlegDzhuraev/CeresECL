@@ -1,13 +1,15 @@
-﻿namespace CeresECL
+﻿using UnityEngine;
+
+namespace CeresECL
 {
     /// <summary> Base class for any logics implementations. </summary>
-    public abstract class Logic
+    public abstract class Logic : MonoBehaviour
     {
         /// <summary> Parent entity of this component. </summary>
-        [CeresIgnoreInject]
-        public Entity Entity;
+        [CeresIgnoreInject, HideInInspector]
+        public IEntity Entity;
         
-        [CeresIgnoreInject]
+        [CeresIgnoreInject, HideInInspector]
         public bool IsInitialized; // C# 8.0 feature for interfaces, so it is there :/
     }
     

@@ -5,28 +5,50 @@ namespace CeresECL
 {
     /// <summary> Container for all components and logics of your object. Also it is MonoBehaviour, so you can use it as the connection to the Unity API.</summary>
     [DisallowMultipleComponent]
-    public sealed class Entity : MonoBehaviour
+    public abstract class Entity : MonoBehaviour, IEntity
     {
         static readonly List<Entity> entities = new List<Entity>(CeresSettings.MaxEntities);
-        
-        public Tags Tags { get; private set; }
-        public Components Components { get; private set; }
+
+        public Tags Tags => tags;
         public Events Events => events;
-        public Logics Logics => logics;
+
+        public IComponents Components => components;
+        public ILogics Logics => logics;
         
-        Logics logics;
+        public Transform Transform => transform;
+        public GameObject GameObject => gameObject;
+        
+        Tags tags;
         Events events;
+        
+        RawComponents components;
+        RawLogics logics;
         
         void Awake()
         {
-            Tags = new Tags(this);
-            Components = new Components(this);
-            
+            tags = new Tags(this);
             events = new Events(this);
-            logics = new Logics(this);
-            
+            components = new RawComponents(this);
+            logics = new RawLogics(this);
+
             entities.Add(this);
+            
+            var gatheredLogics = GetComponents<Logic>();
+            
+            for (var i = 0; i < gatheredLogics.Length; i++)
+                if (!logics.AddExisting(gatheredLogics[i]))
+                    Destroy(gatheredLogics[i]);
+            
+            var gatheredComponents = GetComponents<Component>();
+
+            for (var i = 0; i < gatheredComponents.Length; i++)
+                if (!components.AddExisting(gatheredComponents[i]))
+                    Destroy(gatheredComponents[i]);
+            
+            Build();
         }
+
+        protected virtual void Build() { }
 
         void Run() => logics.Run();
         
@@ -36,7 +58,14 @@ namespace CeresECL
             
             Destroy(gameObject);
         }
+
+        public T AddUnityComponent<T>() where T : MonoBehaviour => gameObject.AddComponent<T>();
+        public T GetUnityComponent<T>() where T : MonoBehaviour => gameObject.GetComponent<T>();
         
+        T IEntity.Spawn<T>() => Spawn<T>();
+        T IEntity.Spawn<T>(GameObject prefab) => Spawn<T>(prefab);
+        
+        /// <summary> Run game update cycle. It should be done from one place in code. </summary>
         public static void UpdateAll()
         {
             for (var i = 0; i < entities.Count; i++)
@@ -55,29 +84,27 @@ namespace CeresECL
             return resultList;
         }
 
-        public static Entity Spawn<T>(GameObject withPrefab) where T : Builder, new()
+        public static T Spawn<T>(GameObject withPrefab) where T : Entity, new()
         {
             var entObject = Instantiate(withPrefab);
 
             return BuildEntity<T>(entObject);
         }
         
-        public static Entity Spawn<T>() where T : Builder, new()
+        public static T Spawn<T>() where T : Entity, new()
         {
             var entObject = new GameObject("Entity");
             
             return BuildEntity<T>(entObject);
         }
 
-        static Entity BuildEntity<T>(GameObject entObject) where T : Builder, new()
+        static T BuildEntity<T>(GameObject entObject) where T : Entity, new()
         {
-            var entity = entObject.GetComponent<Entity>();
+            var entity = entObject.GetComponent<T>();
             
             if (!entity)
-                entity = entObject.AddComponent<Entity>();
-            
-            entity.logics.Add<T>();
-            
+                entity = entObject.AddComponent<T>();
+
             return entity;
         }
     }

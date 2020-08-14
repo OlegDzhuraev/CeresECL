@@ -1,10 +1,10 @@
 ﻿namespace CeresECL.Example
 {
-	public class EnemyEntityBuilder : Builder
+	public class EnemyEntity : Entity
 	{
 		protected override void Build()
 		{
-			Entity.Logics.Add<MoveLogic>();
+			Logics.Add<MoveLogic>();
 		}
 	}
 }

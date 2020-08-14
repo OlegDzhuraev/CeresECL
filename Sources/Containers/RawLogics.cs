@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace CeresECL
 {
-    public sealed class Logics : Container
+    public sealed class RawLogics : Container, ILogics
     {
         readonly Logic[] logics = new Logic[CeresSettings.MaxEntityLogics];
         int logicsCount;
 
         readonly List<object> injects = new List<object>();
 
-        public Logics(Entity entity) : base(entity) { }
+        public RawLogics(Entity entity) : base(entity) { }
         
         public override void Run()
         {
@@ -42,10 +42,8 @@ namespace CeresECL
             if (Have<T>())
                 return;
 
-            var newLogic = new T
-            {
-                Entity = Entity
-            };
+            var newLogic = Entity.AddUnityComponent<T>();
+            newLogic.Entity = Entity;
 
             for (var i = 0; i < injects.Count; i++)
                 Inject(newLogic, injects[i]);
@@ -53,8 +51,31 @@ namespace CeresECL
             logics[logicsCount] = newLogic;
             logicsCount++;
         }
+        
+        public bool AddExisting(Logic logic) 
+        {
+            if (logicsCount == CeresSettings.MaxEntityLogics)
+            {
+                Debug.LogWarning("You're trying to add more logics than it is allowed. Change CeresSettings parameters to allow it.");
+                return false;
+            }
+            
+            for (var i = 0; i < logicsCount; i++)
+                if (logics[i].GetType() == logic.GetType())
+                    return false;
 
-        public bool Have<T>() where T : Logic
+            logic.Entity = Entity;
+
+            for (var i = 0; i < injects.Count; i++)
+                Inject(logic, injects[i]);
+
+            logics[logicsCount] = logic;
+            logicsCount++;
+
+            return true;
+        }
+
+        bool Have<T>() where T : Logic
         {
             for (var i = 0; i < logicsCount; i++)
                 if (logics[i] is T)
@@ -93,17 +114,6 @@ namespace CeresECL
 
             for (var i = 0; i < logicsCount; i++)
                 Inject(logics[i], data);
-        }
-        
-        /// <summary> Used only for editor scripting. </summary>
-        public List<Logic> GetListEditor()
-        {
-            var list = new List<Logic>();
-            
-            for (var i = 0; i < logicsCount; i++)
-                list.Add(logics[i]);
-
-            return list;
         }
     }
 }

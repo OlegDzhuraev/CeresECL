@@ -2,11 +2,11 @@
 
 namespace CeresECL
 {
-    public sealed class Components : Container
+    public sealed class RawComponents : Container, IComponents
     {
         readonly List<Component> components = new List<Component>();
         
-        public Components(Entity entity) : base(entity) { }
+        public RawComponents(Entity entity) : base(entity) { }
         
         public T Get<T>() where T : Component, new()
         {
@@ -14,14 +14,25 @@ namespace CeresECL
                 if (component is T resultComponent)
                     return resultComponent;
 
-            var newComponent = new T
-            {
-                Entity = Entity
-            };
-            
+            var newComponent = Entity.AddUnityComponent<T>();
+            newComponent.Entity = Entity;
+
             components.Add(newComponent);
 
             return newComponent;
+        }
+        
+        public bool AddExisting(Component component)
+        {
+            // todo check entity have this component?
+            if (!components.Contains(component))
+            {
+                component.Entity = Entity;
+                components.Add(component);
+                return true;
+            }
+
+            return false;
         }
         
         public bool Have<T>() where T : Component
@@ -38,17 +49,6 @@ namespace CeresECL
             foreach (var component in components)
                 if (component is T)
                     components.Remove(component);
-        }
-                
-        /// <summary> Used only for editor scripting. </summary>
-        public List<Component> GetListEditor()
-        {
-            var list = new List<Component>();
-
-            for (var i = 0; i < components.Count; i++)
-                list.Add(components[i]);
-            
-            return list;
         }
     }
 }
