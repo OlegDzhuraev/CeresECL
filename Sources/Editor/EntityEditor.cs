@@ -17,10 +17,12 @@ namespace CeresECL
         {
             panelStyle = new GUIStyle();
             panelStyle.padding = new RectOffset(5, 5, 5, 5);
-            panelStyle.normal.background = EditorHelpers.GetColoredTexture(new Color(0.9f, 0.9f, 0.9f));
+            var panelColor = EditorGUIUtility.isProSkin ? new Color(0.25f, 0.25f, 0.25f) : new Color(0.9f, 0.9f, 0.9f);
+            panelStyle.normal.background = EditorHelpers.GetColoredTexture(panelColor);
             
             headerPanelStyle = new GUIStyle(panelStyle);
-            headerPanelStyle.normal.background = EditorHelpers.GetColoredTexture(new Color(0.8f, 0.8f, 0.9f));
+            var headerPanelColor = EditorGUIUtility.isProSkin ? new Color(0.3f, 0.275f, 0.4f) :new Color(0.8f, 0.8f, 0.9f);
+            headerPanelStyle.normal.background = EditorHelpers.GetColoredTexture(headerPanelColor);
         }
 
         public override void OnInspectorGUI()
@@ -34,13 +36,35 @@ namespace CeresECL
             }
             
             var entity = target as Entity;
-            var componentsList = entity.Components.GetListEditor();
-            var tagsList = entity.Tags.GetTagsCopy();
-            var logicsList = entity.Logics.GetListEditor();
-            
+
+            DrawTags(entity);
+            EditorGUILayout.Space();
+            DrawComponents(entity);
+            EditorGUILayout.Space();
+            DrawLogics(entity);
+        }
+                
+        void DrawHeader(string title)
+        { 
+            GUILayout.BeginVertical(headerPanelStyle);
+            GUILayout.Label(title, EditorStyles.boldLabel);
+            GUILayout.EndVertical();
+        }
+        
+        void DrawTags(Entity entity)
+        {
             DrawHeader("Tags");
             
             GUILayout.BeginVertical(panelStyle);
+
+            if (!Application.isPlaying)
+            {
+                GUILayout.Label("Tags is not editable in editor now.", EditorStyles.boldLabel);
+                GUILayout.EndVertical();
+                return;
+            }
+            
+            var tagsList = entity.Tags.GetTagsCopy();
 
             foreach (var keyValuePair in tagsList)
             {
@@ -56,7 +80,12 @@ namespace CeresECL
                 GUILayout.Label("No tags on object", EditorStyles.boldLabel);
             
             GUILayout.EndVertical();
-            
+        }
+
+        void DrawComponents(Entity entity)
+        {
+            var componentsList = entity.Components.GetListEditor();
+
             DrawHeader("Components");
             
             for (var i = 0; i < componentsList.Count; i++)
@@ -79,7 +108,12 @@ namespace CeresECL
                 GUILayout.Label("No components on object", EditorStyles.boldLabel);
                 GUILayout.EndVertical();
             }
-            
+        }
+
+        void DrawLogics(Entity entity)
+        {
+            var logicsList = entity.Logics.GetListEditor();
+                        
             DrawHeader("Logics");
             
             for (var i = 0; i < logicsList.Count; i++)
@@ -116,13 +150,6 @@ namespace CeresECL
 
             GUILayout.EndHorizontal();
             */
-        }
-        
-        void DrawHeader(string title)
-        { 
-            GUILayout.BeginVertical(headerPanelStyle);
-            GUILayout.Label(title, EditorStyles.boldLabel);
-            GUILayout.EndVertical();
         }
 
         void DrawField(FieldInfo field, object obj)

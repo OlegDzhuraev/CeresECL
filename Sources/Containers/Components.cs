@@ -23,6 +23,15 @@ namespace CeresECL
 
             return newComponent;
         }
+        
+        public bool Have<T>() where T : Component
+        {
+            foreach (var component in components)
+                if (component is T)
+                    return true;
+
+            return false;
+        }
 
         public void Delete<T>() where T : Component
         {

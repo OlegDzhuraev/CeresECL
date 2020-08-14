@@ -4,6 +4,7 @@ using UnityEngine;
 namespace CeresECL
 {
     /// <summary> Container for all components and logics of your object. Also it is MonoBehaviour, so you can use it as the connection to the Unity API.</summary>
+    [DisallowMultipleComponent]
     public sealed class Entity : MonoBehaviour
     {
         static readonly List<Entity> entities = new List<Entity>(CeresSettings.MaxEntities);
@@ -23,6 +24,8 @@ namespace CeresECL
             
             events = new Events(this);
             logics = new Logics(this);
+            
+            entities.Add(this);
         }
 
         void Run() => logics.Run();
@@ -39,14 +42,14 @@ namespace CeresECL
             for (var i = 0; i < entities.Count; i++)
                 entities[i].Run();
         }
-
-        /// <summary> Returns all Entities, which was made by Builder of type T. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
-        public static List<Entity> FindAllByBuilder<T>() where T : Builder
+        
+        /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
+        public static List<Entity> FindAllWith<T>() where T : Component
         {
             var resultList = new List<Entity>();
             
             for (var i = 0; i < entities.Count; i++)
-                if (entities[i].Logics.Have<T>())
+                if (entities[i].Components.Have<T>())
                     resultList.Add(entities[i]);
             
             return resultList;
@@ -68,10 +71,12 @@ namespace CeresECL
 
         static Entity BuildEntity<T>(GameObject entObject) where T : Builder, new()
         {
-            var entity = entObject.AddComponent<Entity>();
-            entity.logics.Add<T>();
+            var entity = entObject.GetComponent<Entity>();
             
-            entities.Add(entity);
+            if (!entity)
+                entity = entObject.AddComponent<Entity>();
+            
+            entity.logics.Add<T>();
             
             return entity;
         }
