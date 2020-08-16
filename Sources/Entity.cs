@@ -9,27 +9,8 @@ namespace CeresECL
     {
         static readonly List<Entity> entities = new List<Entity>();
 
-        public Tags Tags
-        {
-            get
-            {
-                if (!tags)
-                    tags = new Tags();
-
-                return tags;
-            }
-        }
-        
-        public Events Events 
-        {
-            get
-            {
-                if (!events)
-                    events = new Events();
-
-                return events;
-            }
-        }
+        public Tags Tags => tags ?? (tags = new Tags());
+        public Events Events => events ?? (events = new Events());
 
         Tags tags;
         Events events;
