@@ -41,9 +41,11 @@ namespace CeresECL
 
             return component;
         }
-
+        
+        /// <summary> Checks, is there a specified Component on Entity. Argument is MonoBehaviour, so it can be used only for Components and Logics - doesn't affects default Unity Components, only for game logic.</summary>
         public bool Have<T>() where T : MonoBehaviour => GetComponent<T>();
 
+        /// <summary> Removes a specified MonoBehaviour from Entity. It can be component or Logic. Doesn't Affect default Unity Components - Only for Game Logic.</summary>
         public void Delete<T>() where T : MonoBehaviour
         {
             var component = GetComponent<T>();
@@ -58,7 +60,13 @@ namespace CeresECL
             for (var i = 0; i < behaviours.Count; i++)
                 behaviours[i].Run();
         }
-
+        
         void OnDestroy() => behaviours.Remove(this);
+
+        /// <summary> Returns Entity with specified Component. Like FindObjectOfType, but faster. </summary>
+        public Entity FindWith<T>() where T : Component => Entity.FindWith<T>();
+        
+        /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
+        public List<Entity> FindAllWith<T>() where T : Component => Entity.FindAllWith<T>();
     }
 }
