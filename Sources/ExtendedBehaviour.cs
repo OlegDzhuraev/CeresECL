@@ -22,13 +22,33 @@ namespace CeresECL
         
         Entity entity;
 
+        [Tooltip("Execution priority of this behaviour Run cycle. Smaller values makes it executing early than others.")]
+        [SerializeField] int executionOrder;
+
         void Awake()
         {
-            behaviours.Add(this);
+            AddToRunQueue();
             Init();
         }
 
+        void AddToRunQueue()
+        {
+            for (var i = 0; i < behaviours.Count; i++)
+            {
+                if (executionOrder <= behaviours[i].executionOrder)
+                {
+                    behaviours.Insert(i, this);
+                    return;
+                }
+            }
+            
+            behaviours.Add(this);
+        }
+
+        void Start() => PostInit();
+
         protected virtual void Init() { }
+        protected virtual void PostInit() { }
         protected virtual void Run() { }
 
         /// <summary> Get (with adding if dont exist) any of game components - Logics or Components. </summary>
