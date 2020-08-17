@@ -8,6 +8,7 @@ namespace CeresECL
     public class ExtendedBehaviour : MonoBehaviour
     {
         static readonly List<ExtendedBehaviour> behaviours = new List<ExtendedBehaviour>();
+        static readonly List<ExtendedBehaviour> newBehaviours = new List<ExtendedBehaviour>();
 
         public Entity Entity
         {
@@ -27,22 +28,9 @@ namespace CeresECL
 
         void Awake()
         {
-            AddToRunQueue();
-            Init();
-        }
+            newBehaviours.Add(this);
 
-        void AddToRunQueue()
-        {
-            for (var i = 0; i < behaviours.Count; i++)
-            {
-                if (executionOrder <= behaviours[i].executionOrder)
-                {
-                    behaviours.Insert(i, this);
-                    return;
-                }
-            }
-            
-            behaviours.Add(this);
+            Init();
         }
 
         void Start() => PostInit();
@@ -77,10 +65,29 @@ namespace CeresECL
         /// <summary> Run game update cycle. It should be done from one place in code. </summary>
         public static void RunAll()
         {
+            for (var i = 0; i < newBehaviours.Count; i++)
+                newBehaviours[i].AddToRunQueue();
+            
+            newBehaviours.Clear();
+
             for (var i = 0; i < behaviours.Count; i++)
                 behaviours[i].Run();
         }
         
+        void AddToRunQueue()
+        {
+            for (var i = 0; i < behaviours.Count; i++)
+            {
+                if (executionOrder <= behaviours[i].executionOrder)
+                {
+                    behaviours.Insert(i, this);
+                    return;
+                }
+            }
+            
+            behaviours.Add(this);
+        }
+
         void OnDestroy() => behaviours.Remove(this);
 
         /// <summary> Returns Entity with specified Component. Like FindObjectOfType, but faster. </summary>
