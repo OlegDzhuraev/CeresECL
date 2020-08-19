@@ -18,7 +18,7 @@ namespace CeresECL
         }
         
         static CeresSettings instance;
-
+        
         public Type TagsEnum;
     }
 }
