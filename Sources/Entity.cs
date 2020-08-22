@@ -24,23 +24,23 @@ namespace CeresECL
             Destroy(gameObject);
         }
         
-        /// <summary> Returns Entity with specified Tag. Like Find. </summary>
+        /// <summary> Returns Entity with specified Tag. Like Unity Find method. </summary>
         public static Entity FindWith(IntTag tag)
         {
             for (var i = 0; i < entities.Count; i++)
-                if (entities[i].tags.Have(tag))
+                if (entities[i].Tags.Have(tag))
                     return entities[i];
 
             return null;
         }
         
-        /// <summary> Returns all Entities with specified Tag. Like Find. </summary>
+        /// <summary> Returns all Entities with specified Tag. Like Unity Find method. </summary>
         public static List<Entity> FindAllWith(IntTag tag)
         {
             var resultList = new List<Entity>();
             
             for (var i = 0; i < entities.Count; i++)
-                if (entities[i].tags.Have(tag))
+                if (entities[i].Tags.Have(tag))
                     resultList.Add(entities[i]);
             
             return resultList;

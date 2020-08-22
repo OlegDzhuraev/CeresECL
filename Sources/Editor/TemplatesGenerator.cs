@@ -23,7 +23,10 @@ namespace CeresECL
         static void CreateEventTemplate() => CreateAnyFromTemplate("Event");
         
         [MenuItem ("Assets/Create/Ceres ECL/Launcher template", false, -199)]
-        static void CreateLauncherTemplate() => CreateAnyFromTemplate("GameLauncher");
+        static void CreateLauncherTemplate() => CreateAnyFromTemplate("GameLauncher"); 
+        
+        [MenuItem ("Assets/Create/Ceres ECL/Scriptable Object template", false, -99)]
+        static void CreateScriptableObjectTemplate() => CreateAnyFromTemplate("ScriptableObject");
         
         static void CreateAnyFromTemplate(string templateName)
         {

@@ -95,5 +95,11 @@ namespace CeresECL
         
         /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
         public List<Entity> FindAllWith<T>() where T : Component => Entity.FindAllWith<T>();
+
+        /// <summary> Returns Entity with specified Tag. Like Unity Find method. </summary>
+        public Entity FindWith(IntTag tag) => Entity.FindWith(tag);
+        
+        /// <summary> Returns all Entities with specified Tag. Like Unity Find method. </summary>
+        public List<Entity> FindAllWith(IntTag tag) => Entity.FindAllWith(tag);
     }
 }
