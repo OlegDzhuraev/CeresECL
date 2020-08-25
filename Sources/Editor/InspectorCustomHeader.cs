@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace CeresECL
+namespace CeresECL.Misc
 {
     [InitializeOnLoad]
     public static class InspectorCustomHeader
@@ -48,8 +48,10 @@ namespace CeresECL
                 {
                     if (Attribute.IsDefined(field, typeof(HideInInspector)))
                         continue;
+
+                    var value = field.GetValue(monoBehs[i]);
                     
-                    if (field.GetValue(monoBehs[i]) == null)
+                    if (value == null || value.Equals(null))
                     {
                         var style = new GUIStyle();
                         style.normal.textColor = new Color(1f, 0.75f, 0f);

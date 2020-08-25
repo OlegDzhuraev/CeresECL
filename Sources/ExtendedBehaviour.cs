@@ -24,7 +24,7 @@ namespace CeresECL
         Entity entity;
 
         [Tooltip("Execution priority of this behaviour Run cycle. Smaller values makes it executing early than others.")]
-        [SerializeField] int executionOrder;
+        [SerializeField, Range(-3, 3)] int executionOrder;
 
         void Awake()
         {

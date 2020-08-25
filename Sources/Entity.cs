@@ -25,7 +25,7 @@ namespace CeresECL
         }
         
         /// <summary> Returns Entity with specified Tag. Like Unity Find method. </summary>
-        public static Entity FindWith(IntTag tag)
+        public new static Entity FindWith(IntTag tag)
         {
             for (var i = 0; i < entities.Count; i++)
                 if (entities[i].Tags.Have(tag))
@@ -35,7 +35,7 @@ namespace CeresECL
         }
         
         /// <summary> Returns all Entities with specified Tag. Like Unity Find method. </summary>
-        public static List<Entity> FindAllWith(IntTag tag)
+        public new static List<Entity> FindAllWith(IntTag tag)
         {
             var resultList = new List<Entity>();
             
@@ -47,7 +47,7 @@ namespace CeresECL
         }
         
         /// <summary> Returns Entity with specified Component. Like FindObjectOfType, but faster. </summary>
-        public static Entity FindWith<T>() where T : Component
+        public new static Entity FindWith<T>() where T : Component
         {
             for (var i = 0; i < entities.Count; i++)
                 if (entities[i].GetComponent<T>())
@@ -57,7 +57,7 @@ namespace CeresECL
         }
         
         /// <summary> Returns all Entities with specific component. Something like FindObjectsOfType, but faster and works with Ceres ECL.</summary>
-        public static List<Entity> FindAllWith<T>() where T : Component
+        public new static List<Entity> FindAllWith<T>() where T : Component
         {
             var resultList = new List<Entity>();
             

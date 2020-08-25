@@ -1,10 +1,11 @@
-﻿using UnityEngine;
+﻿using CeresECL.Misc;
+using UnityEngine;
 
 namespace CeresECL.Example
 {
     public class MoveComponent : MonoBehaviour
     {
         public float Speed;
-        public Vector3 Direction;
+        [RuntimeOnly] public Vector3 Direction;
     }
 }
