@@ -48,7 +48,10 @@ namespace CeresECL.Misc
                 {
                     if (Attribute.IsDefined(field, typeof(HideInInspector)))
                         continue;
-
+                    
+                    if (Attribute.IsDefined(field, typeof(RuntimeOnlyAttribute)))
+                        continue;
+                    
                     var value = field.GetValue(monoBehs[i]);
                     
                     if (value == null || value.Equals(null))
