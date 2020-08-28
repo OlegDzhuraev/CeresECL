@@ -5,6 +5,8 @@ Ceres ECL is **experimental** implementation of Entity Component Logic architect
     <img src="http://dzhuraev.com/CeresECL/CeresECLUnity1.png" width="364" height="385" alt="Ceres ECL">
 </p>
 
+Ceres ECL is designed to be lightweight and used mostly from code, not from Unity Inspector. If you're looking for more Unity-connected thing, take look at [PlutoECL](https://github.com/InsaneOneHub/PlutoECL).
+
 ### What is Entity Component Logic?
 It is inspired by Entity Component System and Components over Inheritance approaches. 
 Difference from ECS is that there no Systems, which handles a lot of objects, but there is Logics, which handle self objects like MonoBehaviours in Unity. 
