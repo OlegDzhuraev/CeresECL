@@ -20,5 +20,11 @@ namespace CeresECL
         static CeresSettings instance;
         
         public Type TagsEnum;
+
+        [Tooltip("Adds Quck Entity add button and shows null and empty fields.")]
+        public bool UseCustomInspectorHeader = true;
+        
+        [Tooltip("Highlights in hierarchy objects with Components which have null and empty fields.")]
+        public bool UseCustomHierarchy = true;
     }
 }

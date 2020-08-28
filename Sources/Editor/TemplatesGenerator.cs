@@ -120,7 +120,7 @@ namespace CeresECL
         static string GetTemplateContent(string templateName)
         {
             var templates = new List<TextAsset>();
-            Misc.EditorHelpers.LoadAssetsToList(templates, "l: CeresTemplate");
+            EditorHelpers.LoadAssetsToList(templates, "l: CeresTemplate");
 
             var template = templates.Find(t => t.name.Contains(templateName));
 

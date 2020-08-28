@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace CeresECL.Misc
+namespace CeresECL
 {
     public static class EditorHelpers
     {

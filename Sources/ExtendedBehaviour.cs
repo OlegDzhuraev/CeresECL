@@ -71,7 +71,8 @@ namespace CeresECL
             newBehaviours.Clear();
 
             for (var i = 0; i < behaviours.Count; i++)
-                behaviours[i].Run();
+                if (behaviours[i].enabled)
+                    behaviours[i].Run();
         }
         
         void AddToRunQueue()

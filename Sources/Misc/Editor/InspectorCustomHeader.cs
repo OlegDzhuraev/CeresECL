@@ -15,6 +15,9 @@ namespace CeresECL.Misc
 
         static void DrawCeresExtension(Editor editor)
         {
+            if (!CeresSettings.Instance || !CeresSettings.Instance.UseCustomInspectorHeader)
+                return;
+            
             if (editor.target is GameObject gameObject)
             {
                 var entity = gameObject.GetComponent<Entity>();
@@ -49,9 +52,9 @@ namespace CeresECL.Misc
                     if (Attribute.IsDefined(field, typeof(HideInInspector)))
                         continue;
                     
-                    if (Attribute.IsDefined(field, typeof(RuntimeOnlyAttribute)))
+                    if (Attribute.IsDefined(field, typeof(RuntimeOnlyAttribute)) || Attribute.IsDefined(field, typeof(ReadOnlyAttribute)))
                         continue;
-                    
+
                     var value = field.GetValue(monoBehs[i]);
                     
                     if (value == null || value.Equals(null))
