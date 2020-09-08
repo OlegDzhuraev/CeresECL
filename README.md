@@ -234,14 +234,17 @@ public class TestLogic : Logic, IRunLogic
 Dependency Injection idea came from LeoECS, you can find a link to its repo at the end of readme.
 
 ## Debug
-To check state of your Entity, select its GameObject on scene and you will see all Tags, Components and Logics, added to the entity with their parameters:
+To check state of your **Entity**, select its GameObject on scene and you will see all **Tags**, **Components** and **Logics**, added to the entity with their parameters:
 <p align="center">
     <img src="http://dzhuraev.com/CeresECL/CeresECLUnity1.png" width="364" height="385" alt="Ceres ECL">
 </p>
 
 ## More FAQ
 ### Can I edit variables or entities from Inspector
-**No**. All changes should be done from code - this is place for all your game logic. If you need add some data - load it from **Scritable Object** files. 
+**No**. All changes should be done from code - this is place for all your game logic. If you need add some data - load it from **Scritable Object** files and use Dependency Injection. If you prefer using Inspector for all your settings, take look at [PlutoECL](https://github.com/InsaneOneHub/PlutoECL), it is much more Inspector-friendly.
+
+### How I can use OnTriggerEnter, for example
+You can create classic **MonoBehaviour**, and send Event from it to the Entity.Events. Check Example, there is **CollisionSender** class. In [PlutoECL](https://github.com/InsaneOneHub/PlutoECL) you can use all these methods directly in Logic code. And no, this is not Ad for PlutoECL :D
 
 ### Is Ceres ECL production-ready
 No, until there will be at least one release on GitHub. Currently it is fully experimental non-commercial project. But you can use it on your risk, all features already should work.
