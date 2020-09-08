@@ -60,7 +60,14 @@ namespace CeresECL
                 foreach (var action in dict[tag])
                     action?.Invoke();
         }
+        
+        public int Count(IntTag tag)
+        {
+            addedTags.TryGetValue(tag, out var count);
 
+            return count;
+        }
+        
         public bool Have(IntTag tag) => addedTags.ContainsKey(tag);
 
         public bool HaveAny(params IntTag[] tags)

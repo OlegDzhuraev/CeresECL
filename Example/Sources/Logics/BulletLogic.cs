@@ -10,7 +10,7 @@ namespace CeresECL.Example
 		{
 			bulletComponent = Entity.Components.Get<BulletComponent>();
 			
-			Entity.Events.Subscribe<ColliderHitEvent>(CheckHit);
+			Entity.Events.Sub<ColliderHitEvent>(CheckHit);
 		}
 		
 		void IRunLogic.Run()

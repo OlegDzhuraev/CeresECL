@@ -54,7 +54,61 @@ namespace CeresECL
             
             return resultList;
         }
+                
+        /// <summary> Returns Entity with specified Component. Like FindObjectOfType, but faster. </summary>
+        public static Entity FindWith<T>() where T : Component
+        {
+            for (var i = 0; i < entities.Count; i++)
+                if (entities[i].Components.Have<T>())
+                    return entities[i];
 
+            return null;
+        }
+        
+        /// <summary> Returns Entity with specified Tag. Like Unity Find method. </summary>
+        public static Entity FindWith(IntTag tag)
+        {
+            for (var i = 0; i < entities.Count; i++)
+                if (entities[i].Tags.Have(tag))
+                    return entities[i];
+
+            return null;
+        }
+                
+        /// <summary> Returns all Entities with specified Tag. Like Unity Find method. </summary>
+        public static List<Entity> FindAllWith(IntTag tag)
+        {
+            var resultList = new List<Entity>();
+            
+            for (var i = 0; i < entities.Count; i++)
+                if (entities[i].Tags.Have(tag))
+                    resultList.Add(entities[i]);
+            
+            return resultList;
+        }
+        
+        /// <summary> Finds specified Component on level. If there several Components of this type on level, you receive only one of them - which was created first. </summary>
+        public static T FindComponent<T>() where T : Component, new()
+        {
+            for (var i = 0; i < entities.Count; i++)
+                if (entities[i].Components.Have<T>())
+                    return entities[i].Components.Get<T>();
+
+            return null;
+        }    
+        
+        /// <summary> Finds all of specified Component on level. </summary>
+        public static List<T> FindAllComponents<T>() where T : Component, new()
+        {
+            var list = new List<T>();
+            
+            for (var i = 0; i < entities.Count; i++)
+                if (entities[i].Components.Have<T>())
+                    list.Add(entities[i].Components.Get<T>());
+
+            return list;
+        }
+        
         public static Entity Spawn<T>(GameObject withPrefab) where T : Builder, new()
         {
             var entObject = Instantiate(withPrefab);
@@ -68,16 +122,31 @@ namespace CeresECL
             
             return BuildEntity<T>(entObject);
         }
-
+     
+        /// <summary>Spawn empty Entity. Not recommended - use Spawn with Builder argument. </summary>
+        public static Entity Spawn()
+        {
+            var entObject = new GameObject("Entity");
+            
+            return BuildEntity(entObject);
+        }
+        
         static Entity BuildEntity<T>(GameObject entObject) where T : Builder, new()
+        {
+            var entity = BuildEntity(entObject);
+            
+            entity.logics.Add<T>();
+            
+            return entity;
+        }
+        
+        static Entity BuildEntity(GameObject entObject)
         {
             var entity = entObject.GetComponent<Entity>();
             
             if (!entity)
                 entity = entObject.AddComponent<Entity>();
-            
-            entity.logics.Add<T>();
-            
+
             return entity;
         }
     }

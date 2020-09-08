@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace CeresECL
 {
@@ -8,6 +9,7 @@ namespace CeresECL
         
         public Components(Entity entity) : base(entity) { }
         
+        /// <summary> Get (with add if dont exist) any of game Components.</summary>
         public T Get<T>() where T : Component, new()
         {
             foreach (var component in components)
@@ -21,6 +23,23 @@ namespace CeresECL
             
             components.Add(newComponent);
 
+            return newComponent;
+        }
+        
+        /// <summary> Get (with add if dont exist) any of game Components.</summary>
+        public Component Get(Type componentType)
+        {
+            if (!typeof(Component).IsAssignableFrom(componentType))
+                return null;
+            
+            foreach (var comp in components)
+                if (comp.GetType() == componentType)
+                    return comp;
+            
+            var newComponent = Activator.CreateInstance(componentType) as Component;
+            newComponent.Entity = Entity;
+            components.Add(newComponent);
+            
             return newComponent;
         }
         
