@@ -249,9 +249,6 @@ You can create classic **MonoBehaviour**, and send Event from it to the Entity.E
 ### Is Ceres ECL production-ready
 No, until there will be at least one release on GitHub. Currently it is fully experimental non-commercial project. But you can use it on your risk, all features already should work.
 
-### Why it is named Ceres?
-Idk. I like space. And I had no ideas how to name this project. So, Ceres.
-
 ## Examples
 Check Example folder from repository, it contains simple Ceres ECL usage example. 
 
@@ -266,3 +263,10 @@ Leopotam for LeoECS https://github.com/Leopotam/ecs
 Pixeye for Actors https://github.com/PixeyeHQ/actors.unity
 
 Inspired me to use ECS and think moer about different coding architecture patterns. :)
+
+## Donate
+You can support development using cryptocurrency :)
+
+**Zilliqa $ZIL (ZIL):** zil1p6j0js2d5dat36n9zpp4g9xj776vghukkaa32l
+
+**Stellar Lumens (XLM):** GBY4Q6AKWLQIOT37D3X643LLEVZA7WRWBUU4RCVEG6PN57QCIWT7LRIX
