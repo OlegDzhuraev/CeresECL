@@ -254,19 +254,9 @@ Check Example folder from repository, it contains simple Ceres ECL usage example
 
 Links to games examples on GitHub will be added when these examples will be created. :)
 
-## Contacts
-Our Discord server: https://discord.gg/SB9VHn4
-
 ## Thanks to
 Leopotam for LeoECS https://github.com/Leopotam/ecs
 
 Pixeye for Actors https://github.com/PixeyeHQ/actors.unity
 
 Inspired me to use ECS and think moer about different coding architecture patterns. :)
-
-## Donate
-You can support development using cryptocurrency :)
-
-**Zilliqa $ZIL (ZIL):** zil1p6j0js2d5dat36n9zpp4g9xj776vghukkaa32l
-
-**Stellar Lumens (XLM):** GBY4Q6AKWLQIOT37D3X643LLEVZA7WRWBUU4RCVEG6PN57QCIWT7LRIX
